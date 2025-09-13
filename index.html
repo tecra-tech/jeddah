@@ -124,6 +124,88 @@
 
     /* --- Canvas petals --- */
     #petalsCanvas{ position:absolute; inset:0; z-index:2; pointer-events:none; }
+
+    /* media di dalam card */
+    .card .media{
+    margin: 0 0 14px;
+    border: 1px solid #dbe4ef;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 8px 18px var(--ring);
+    aspect-ratio: 16/9;              /* jaga proporsi */
+    background:#f4f7fb;
+    }
+   .card .media img{
+    width:100%; height:100%;
+    object-fit: cover;               /* crop cantik */
+    display:block;
+    }
+
+    /* --- COUPLE VIDEO HERO --- */
+.couple-hero{
+  position:relative;
+  border:1px solid #dbe4ef;
+  border-radius:16px;
+  overflow:hidden;
+  margin-bottom:16px;
+  aspect-ratio:16/9;              /* jaga proporsi */
+  box-shadow:0 10px 24px var(--ring);
+  background:#000;
+}
+.couple-hero video{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+  filter:saturate(1.05) contrast(1.05);
+}
+.couple-hero .veil{
+  position:absolute; inset:0;
+  /* gelapkan sedikit pinggir2 agar teks kebaca */
+  background:
+    radial-gradient(120% 140% at 50% 50%, rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 80%),
+    linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05));
+  pointer-events:none;
+}
+
+/* badge nama (kiri & kanan) */
+.couple-hero .name{
+  position:absolute; top:50%; transform:translateY(-50%);
+  max-width:46%;
+  display:flex; flex-direction:column; gap:6px;
+}
+.couple-hero .name.left{ left:14px; }
+.couple-hero .name.right{ right:14px; text-align:right; }
+
+.couple-hero .pill{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid #dbe4ef;
+  background:rgba(255,255,255,.86);
+  color:var(--dove);
+  font-weight:700;
+  backdrop-filter:blur(6px);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  box-shadow:0 8px 18px rgba(0,0,0,.15);
+}
+.couple-hero .sub{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:10px;
+  border:1px dashed rgba(138,160,184,.6);
+  background:rgba(255,255,255,.78);
+  color:#435568; font-size:13px; font-weight:600;
+  backdrop-filter:blur(6px);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+/* responsive: kalau layar kecil, agak turunin yang kanan biar lega */
+@media (max-width:420px){
+  .couple-hero .name.left{ top:42%; }
+  .couple-hero .name.right{ top:62%; }
+}
+    
+
   </style>
 </head>
 <body>
@@ -163,6 +245,9 @@
     <div class="grid-2">
       <div class="card">
         <h3>Waktu &amp; Tempat</h3>
+        <div class="media">
+          <img src="image/kjri-jeddah.png" alt="Gedung KJRI Jeddah" loading="lazy">
+        </div>
         <p><strong>Akad:</strong> Kamis, 20 November 2025, <strong>pukul 11:00</strong> (Waktu Jeddah)</p>
         <p><strong>Tempat:</strong> Konsulat Jenderal Republik Indonesia (KJRI) — Jeddah</p>
         <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink"></a></p>
