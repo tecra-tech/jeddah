@@ -17,6 +17,9 @@
       --muted:#eef2f7;          /* latar lembut */
       --ring: rgba(45,74,106,.22);
     }
+
+    html { scroll-behavior: smooth; }
+
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:var(--paper);}    
@@ -138,7 +141,7 @@
 
       <div class="cta-row">
         <a id="addCalBtn" class="btn primary" href="#">Simpan ke Kalender</a>
-        <a class="btn ghost" href="#lokasi">Lihat Lokasi</a>
+        <a class="btn ghost" href="#peta">Lihat Lokasi</a>
       </div>
     </div>
     <div class="wave" aria-hidden="true"></div>
@@ -162,7 +165,7 @@
         <h3>Waktu &amp; Tempat</h3>
         <p><strong>Akad:</strong> Kamis, 20 November 2025, <strong>pukul 11:00</strong> (Waktu Jeddah)</p>
         <p><strong>Tempat:</strong> Konsulat Jenderal Republik Indonesia (KJRI) — Jeddah</p>
-        <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink">Buka di Google Maps</a></p>
+        <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink"></a></p>
       </div>
       <div class="card">
         <h3>Mempelai</h3>
@@ -191,7 +194,7 @@
   <!-- LOCATION & RSVP -->
   <section class="section reveal">
     <div class="row">
-      <div class="card">
+      <div class="card" id="peta">
         <h3>Lokasi</h3>
         <div class="map-card">
           <header>KJRI Jeddah</header>
@@ -201,7 +204,7 @@
           </div>
           <iframe id="mapFrame" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
-        <small>Jika peta tidak tampil, tombol "Buka Maps" tetap berfungsi.</small>
+        
       </div>
       <div class="card">
         <h3>RSVP</h3>
