@@ -78,8 +78,6 @@
     .progress{position:absolute; left:12px; right:12px; top:10px; display:flex; gap:6px; z-index:3}
     .progress .bar{flex:1; height:4px; background:rgba(255,255,255,.35); border-radius:999px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
     .progress .fill{height:100%; width:0%; background:#fff; border-radius:inherit}
-    /* sembunyikan tombol prev/next */
-    .nav{display:none !important}
 
     /* --- MAP CARD --- */
     .map-card{ position:relative; border:1px solid #dbe4ef; border-radius:16px; overflow:hidden; box-shadow:0 10px 24px var(--ring); }
@@ -87,6 +85,32 @@
     .map-card .actions{ position:absolute; right:12px; bottom:12px; z-index:2; display:flex; gap:8px; }
     .btn.small{ padding:8px 12px; border-radius:10px; font-weight:600; border:1px solid #dbe4ef; background:#fff; color:var(--dove); box-shadow:0 8px 16px rgba(0,0,0,.08); }
     .map-card iframe{ width:100%; height:100%; aspect-ratio:16/9; border:0; filter:saturate(1.05) contrast(1.05); }
+
+    /* --- LAYOUT: Lokasi & RSVP --- */
+    .row{ display:grid; grid-template-columns:1fr; gap: 32px; }
+    @media (min-width:760px){ .row{ grid-template-columns:1.2fr .8fr; gap: 28px; } }
+
+    /* --- MINI AUDIO PLAYER --- */
+    .audio-pill{
+      position:fixed; left:50%; bottom:14px; transform:translateX(-50%);
+      display:flex; align-items:center; gap:10px;
+      padding:8px 12px 8px 8px; border:1px solid #dbe4ef; border-radius:999px;
+      background:rgba(255,255,255,.95); backdrop-filter:blur(6px);
+      box-shadow:0 12px 30px rgba(45,74,106,.25); z-index:60;
+    }
+    .audio-pill .aud-btn{
+      width:36px; height:36px; border-radius:50%;
+      border:1px solid #dbe4ef; background:#fff; color:var(--dove);
+      display:grid; place-items:center; font-weight:700; cursor:pointer;
+    }
+    .audio-pill .meta{min-width:170px; max-width:210px}
+    .audio-pill .title{
+      font-weight:600; color:var(--dove); font-size:13px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
+    }
+    .audio-pill .bar{height:4px; background:#e6edf6; border-radius:999px; overflow:hidden; margin-top:6px}
+    .audio-pill .fill{height:100%; width:0%; background:var(--dove); transition:width .2s linear}
+    @media (max-width:380px){ .audio-pill{padding-right:8px}.audio-pill .meta{min-width:140px;max-width:160px} }
 
     /* --- FOOTER --- */
     footer{background:linear-gradient(180deg,#f3f7fb, #e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
@@ -98,9 +122,6 @@
 
     /* --- Canvas petals --- */
     #petalsCanvas{ position:absolute; inset:0; z-index:2; pointer-events:none; }
-
-    /* --- Responsive --- */
-    @media(min-width:760px){ .grid-2{grid-template-columns:1fr 1fr} .row{grid-template-columns:1.2fr .8fr} }
   </style>
 </head>
 <body>
@@ -151,20 +172,17 @@
     </div>
   </section>
 
-  <!-- CAROUSEL -->
+  <!-- GALERI (FADE) -->
   <section class="section reveal">
     <h2>Galeri</h2>
     <div class="carousel" id="carousel">
       <div class="track" id="track">
         <!-- Ganti src gambar berikut dengan foto kalian -->
-        <img class="slide" src="image/wedding-foto-1.jpeg" alt="Foto 1" onerror="this.outerHTML='<div class=\'slide\'>Letakkan foto kalian di sini (foto 1)</div>'"/>
-        <img class="slide" src="image/wedding-foto-2.jpeg" alt="Foto 2" onerror="this.outerHTML='<div class=\'slide\'>Letakkan foto kalian di sini (foto 2)</div>'"/>
-        <img class="slide" src="image/wedding-foto-3.jpeg" alt="Foto 3" onerror="this.outerHTML='<div class=\'slide\'>Letakkan foto kalian di sini (foto 3)</div>'"/>
+        <img class="slide" src="image/wedding-foto-1.jpeg" alt="Foto 1" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 1)</div>'"/>
+        <img class="slide" src="image/wedding-foto-2.jpeg" alt="Foto 2" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 2)</div>'"/>
+        <img class="slide" src="image/wedding-foto-3.jpeg" alt="Foto 3" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 3)</div>'"/>
       </div>
-      <div class="nav" aria-hidden="true">
-        <button id="prev" aria-label="Sebelumnya">◀</button>
-        <button id="next" aria-label="Berikutnya">▶</button>
-      </div>
+      <!-- Progress bars akan dibuat via JS -->
     </div>
   </section>
 
@@ -186,8 +204,8 @@
       <div class="card">
         <h3>RSVP</h3>
         <p>Mohon konfirmasi kehadiran agar kami dapat mempersiapkan dengan baik.</p>
-        <p><a class="btn primary" id="waBtn" href="https://wa.me/6281234567890?text=Assalamualaikum%2C%20saya%20akan%20hadir%20di%20acara%20Karina%20%26%20Alvin%20insyaAllah." target="_blank" rel="noreferrer">Konfirmasi via WhatsApp</a></p>
-        <small>Ganti nomor WhatsApp pada tautan di atas.</small>
+        <p><a class="btn primary" id="waBtn" href="https://wa.me/6285607551162?text=Assalamualaikum%2C%20saya%20akan%20hadir%20di%20acara%20Karina%20%26%20Alvin%20insyaAllah." target="_blank" rel="noreferrer">Konfirmasi via WhatsApp</a></p>
+        <small>Terima kasih atas konfirmasinya.</small>
       </div>
     </div>
   </section>
@@ -203,6 +221,16 @@
       <p style="text-align:center;margin-top:18px;color:#475569">Terima kasih atas doa dan kehadiran Anda.</p>
     </div>
   </footer>
+
+  <!-- Mini Player -->
+  <div class="audio-pill" id="audioPill" aria-live="polite">
+    <button class="aud-btn" id="audioToggle" aria-label="Putar musik">▶</button>
+    <div class="meta">
+      <span class="title" id="audTitle">Somewhere Only We Know</span>
+      <div class="bar"><span class="fill" id="audFill"></span></div>
+    </div>
+    <audio id="bgm" src="audio/lagu.mp3" preload="auto" loop></audio>
+  </div>
 
   <script>
     // ====== CONFIG ======
@@ -386,6 +414,38 @@
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+
+    // ====== AUDIO MINI PLAYER ======
+    const audio   = document.getElementById('bgm');
+    const audBtn  = document.getElementById('audioToggle');
+    const audFill = document.getElementById('audFill');
+    const audTitle= document.getElementById('audTitle');
+
+    audTitle.textContent = 'Somewhere Only We Know'; // ubah judul di sini
+    audio.volume = 0.85; // volume awal
+    updateUI();
+
+    function updateUI(){
+      audBtn.textContent = audio.paused ? '▶' : '❚❚';
+      audBtn.setAttribute('aria-label', audio.paused ? 'Putar musik' : 'Jeda musik');
+      const p = (audio.duration ? (audio.currentTime / audio.duration) : 0) * 100;
+      audFill.style.width = p + '%';
+    }
+
+    audBtn.addEventListener('click', async () => {
+      try{
+        if(audio.paused){ await audio.play(); } else { audio.pause(); }
+      }catch(e){ console.warn(e); }
+      updateUI();
+    });
+
+    audio.addEventListener('timeupdate', updateUI);
+    audio.addEventListener('play', updateUI);
+    audio.addEventListener('pause', updateUI);
+    audio.addEventListener('ended', updateUI);
+
+    // pause saat tab ditinggal
+    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) audio.pause(); });
 
     // ====== Event done ======
     (function(){
