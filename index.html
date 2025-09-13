@@ -10,16 +10,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <style>
     :root{
-      --dove:#2d4a6a;           /* biru dove elegan */
-      --dove-weak:#8aa0b8;      /* aksen */
-      --ink:#0f172a;            /* teks */
-      --paper:#ffffff;          /* latar */
-      --muted:#eef2f7;          /* latar lembut */
-      --ring: rgba(45,74,106,.22);
+      --dove:#2d4a6a; --dove-weak:#8aa0b8; --ink:#0f172a; --paper:#ffffff; --muted:#eef2f7; --ring: rgba(45,74,106,.22);
     }
-
-    html { scroll-behavior: smooth; }
-
+    html{scroll-behavior:smooth}
     *{box-sizing:border-box}
     html,body{height:100%}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:var(--paper);}    
@@ -27,30 +20,24 @@
     img{max-width:100%;display:block}
 
     /* --- HERO --- */
-    .hero{ position:relative; isolation:isolate; color:#fff; overflow:hidden;
+    .hero{position:relative;isolation:isolate;color:#fff;overflow:hidden;
       background: radial-gradient(1200px 600px at 20% -10%, #46709c 0%, rgba(70,112,156,0) 60%),
                   radial-gradient(1200px 600px at 120% 10%, #20374f 0%, rgba(32,55,79,0) 65%),
                   linear-gradient(180deg, #385b80 0%, #20364c 100%);
-      min-height: 100vh; /* fallback */
-      min-height: 100svh; /* mobile viewport yang stabil */
+      min-height:100svh;
     }
-    .hero-inner{max-width:1100px;margin:0 auto;padding:88px 20px 72px;text-align:center; position:relative; z-index:3;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      min-height: calc(100vh - 64px); /* fallback */
-      min-height: calc(100svh - 64px);
-    }
+    .hero-inner{max-width:1100px;margin:0 auto;padding:88px 20px 72px;text-align:center;position:relative;z-index:3;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:calc(100svh - 64px);}
     .badge{display:inline-block;padding:8px 14px;border:1.5px solid rgba(255,255,255,.6);border-radius:999px;letter-spacing:.14em;text-transform:uppercase;font-size:12px;background:rgba(255,255,255,.06);backdrop-filter:blur(2px)}
     .basmalah{font-family:'Noto Naskh Arabic',serif;font-size:28px;margin:18px 0 6px;opacity:.95}
-    .names{font-family:'Playfair Display',serif;font-weight:700;font-size: clamp(36px, 6vw, 64px);letter-spacing:.02em;margin:8px 0 8px}
+    .names{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(36px,6vw,64px);letter-spacing:.02em;margin:8px 0 8px}
     .meta{opacity:.9;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
     .meta .dot{opacity:.5;padding:0 .5ch}
-
     .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
     .btn{appearance:none;border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.25)}
     .btn.primary{background:#fff;color:var(--dove)}
     .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
-
-    .wave{position:absolute; left:0; right:0; bottom:0; height:64px; background:linear-gradient(180deg, #20364c 0%, transparent 60%);mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" d="M0,224L48,197.3C96,171,192,117,288,96C384,75,480,85,576,117.3C672,149,768,203,864,208C960,213,1056,171,1152,138.7C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/></svg>') center/cover no-repeat}
+    .wave{position:absolute;left:0;right:0;bottom:0;height:64px;background:linear-gradient(180deg,#20364c 0%,transparent 60%);mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" d="M0,224L48,197.3C96,171,192,117,288,96C384,75,480,85,576,117.3C672,149,768,203,864,208C960,213,1056,171,1152,138.7C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/></svg>') center/cover no-repeat}
 
     /* --- SECTIONS --- */
     .section{max-width:1100px;margin:0 auto;padding:48px 20px}
@@ -66,56 +53,53 @@
     /* --- DETAILS --- */
     .grid-2{display:grid;grid-template-columns:1fr;gap:16px}
     .card{background:#fff;border:1px solid #dbe4ef;border-radius:18px;padding:20px 22px;box-shadow:0 10px 24px var(--ring)}
-    .card h3{margin:0 0 8px;font-family:'Playfair Display',serif;color:var(--dove)}
+    .card h3{margin:0 0 12px;font-family:'Playfair Display',serif;color:var(--dove)}
     .pair{display:grid;grid-template-columns:1fr;gap:14px}
     .person{border:1px dashed var(--dove-weak);padding:16px;border-radius:14px;background:#f9fbff}
     .person .name{font-weight:700;color:var(--dove)}
     .person .parents{color:#435568;font-size:14px;margin-top:2px}
 
+    /* media (img/video) di dalam card */
+    .card .media{
+      margin:0 0 14px;border:1px solid #dbe4ef;border-radius:14px;overflow:hidden;
+      box-shadow:0 8px 18px var(--ring);aspect-ratio:16/9;background:#f4f7fb;
+    }
+    .card .media img,.card .media video{width:100%;height:100%;object-fit:cover;display:block}
+
     /* --- GALERI (FADE, STORY STYLE) --- */
-    .carousel{position:relative; overflow:hidden;}
-    .track{position:relative; aspect-ratio:16/9; touch-action:none; user-select:none;}
-    .slide{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 2s ease;}
+    .carousel{position:relative;overflow:hidden;}
+    .track{position:relative;aspect-ratio:16/9;touch-action:none;user-select:none;}
+    .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s ease;}
     .slide.active{opacity:1}
-    .progress{position:absolute; left:12px; right:12px; top:10px; display:flex; gap:6px; z-index:3}
-    .progress .bar{flex:1; height:4px; background:rgba(255,255,255,.35); border-radius:999px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
-    .progress .fill{height:100%; width:0%; background:#fff; border-radius:inherit}
+    .progress{position:absolute;left:12px;right:12px;top:10px;display:flex;gap:6px;z-index:3}
+    .progress .bar{flex:1;height:4px;background:rgba(255,255,255,.35);border-radius:999px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
+    .progress .fill{height:100%;width:0%;background:#fff;border-radius:inherit}
 
     /* --- MAP CARD --- */
-    .map-card{ position:relative; border:1px solid #dbe4ef; border-radius:16px; overflow:hidden; box-shadow:0 10px 24px var(--ring); }
-    .map-card header{ position:absolute; left:12px; top:12px; z-index:2; background:rgba(255,255,255,.9); border:1px solid #dbe4ef; padding:8px 10px; border-radius:10px; font-weight:600; color:var(--dove); }
-    .map-card .actions{ position:absolute; right:12px; bottom:12px; z-index:2; display:flex; gap:8px; }
-    .btn.small{ padding:8px 12px; border-radius:10px; font-weight:600; border:1px solid #dbe4ef; background:#fff; color:var(--dove); box-shadow:0 8px 16px rgba(0,0,0,.08); }
-    .map-card iframe{ width:100%; height:100%; aspect-ratio:16/9; border:0; filter:saturate(1.05) contrast(1.05); }
+    .map-card{position:relative;border:1px solid #dbe4ef;border-radius:16px;overflow:hidden;box-shadow:0 10px 24px var(--ring);}
+    .map-card header{position:absolute;left:12px;top:12px;z-index:2;background:rgba(255,255,255,.9);border:1px solid #dbe4ef;padding:8px 10px;border-radius:10px;font-weight:600;color:var(--dove);}
+    .map-card .actions{position:absolute;right:12px;bottom:12px;z-index:2;display:flex;gap:8px;}
+    .btn.small{padding:8px 12px;border-radius:10px;font-weight:600;border:1px solid #dbe4ef;background:#fff;color:var(--dove);box-shadow:0 8px 16px rgba(0,0,0,.08);}
+    .map-card iframe{width:100%;height:100%;aspect-ratio:16/9;border:0;filter:saturate(1.05) contrast(1.05);}
 
     /* --- LAYOUT: Lokasi & RSVP --- */
-    .row{ display:grid; grid-template-columns:1fr; gap: 32px; }
-    @media (min-width:760px){ .row{ grid-template-columns:1.2fr .8fr; gap: 28px; } }
+    .row{display:grid;grid-template-columns:1fr;gap:32px;}
+    @media (min-width:760px){.row{grid-template-columns:1.2fr .8fr;gap:28px;}}
 
     /* --- MINI AUDIO PLAYER --- */
-    .audio-pill{
-      position:fixed; left:50%; bottom:14px; transform:translateX(-50%);
-      display:flex; align-items:center; gap:10px;
-      padding:8px 12px 8px 8px; border:1px solid #dbe4ef; border-radius:999px;
-      background:rgba(255,255,255,.95); backdrop-filter:blur(6px);
-      box-shadow:0 12px 30px rgba(45,74,106,.25); z-index:60;
-    }
-    .audio-pill .aud-btn{
-      width:36px; height:36px; border-radius:50%;
-      border:1px solid #dbe4ef; background:#fff; color:var(--dove);
-      display:grid; place-items:center; font-weight:700; cursor:pointer;
-    }
-    .audio-pill .meta{min-width:170px; max-width:210px}
-    .audio-pill .title{
-      font-weight:600; color:var(--dove); font-size:13px;
-      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
-    }
-    .audio-pill .bar{height:4px; background:#e6edf6; border-radius:999px; overflow:hidden; margin-top:6px}
-    .audio-pill .fill{height:100%; width:0%; background:var(--dove); transition:width .2s linear}
-    @media (max-width:380px){ .audio-pill{padding-right:8px}.audio-pill .meta{min-width:140px;max-width:160px} }
+    .audio-pill{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;
+      padding:8px 12px 8px 8px;border:1px solid #dbe4ef;border-radius:999px;background:rgba(255,255,255,.95);backdrop-filter:blur(6px);
+      box-shadow:0 12px 30px rgba(45,74,106,.25);z-index:60;}
+    .audio-pill .aud-btn{width:36px;height:36px;border-radius:50%;border:1px solid #dbe4ef;background:#fff;color:var(--dove);
+      display:grid;place-items:center;font-weight:700;cursor:pointer;}
+    .audio-pill .meta{min-width:170px;max-width:210px}
+    .audio-pill .title{font-weight:600;color:var(--dove);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+    .audio-pill .bar{height:4px;background:#e6edf6;border-radius:999px;overflow:hidden;margin-top:6px}
+    .audio-pill .fill{height:100%;width:0%;background:var(--dove);transition:width .2s linear}
+    @media (max-width:380px){.audio-pill{padding-right:8px}.audio-pill .meta{min-width:140px;max-width:160px}}
 
     /* --- FOOTER --- */
-    footer{background:linear-gradient(180deg,#f3f7fb, #e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
+    footer{background:linear-gradient(180deg,#f3f7fb,#e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
     .quote{max-width:900px;margin:10px auto 0;border-left:3px solid var(--dove-weak);padding:10px 14px;background:#f8fbff;border-radius:10px}
 
     /* --- Reveal --- */
@@ -123,89 +107,7 @@
     .reveal.on{opacity:1;transform:none}
 
     /* --- Canvas petals --- */
-    #petalsCanvas{ position:absolute; inset:0; z-index:2; pointer-events:none; }
-
-    /* media di dalam card */
-    .card .media{
-    margin: 0 0 14px;
-    border: 1px solid #dbe4ef;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 8px 18px var(--ring);
-    aspect-ratio: 16/9;              /* jaga proporsi */
-    background:#f4f7fb;
-    }
-   .card .media img{
-    width:100%; height:100%;
-    object-fit: cover;               /* crop cantik */
-    display:block;
-    }
-
-    /* --- COUPLE VIDEO HERO --- */
-.couple-hero{
-  position:relative;
-  border:1px solid #dbe4ef;
-  border-radius:16px;
-  overflow:hidden;
-  margin-bottom:16px;
-  aspect-ratio:16/9;              /* jaga proporsi */
-  box-shadow:0 10px 24px var(--ring);
-  background:#000;
-}
-.couple-hero video{
-  position:absolute; inset:0;
-  width:100%; height:100%;
-  object-fit:cover;
-  filter:saturate(1.05) contrast(1.05);
-}
-.couple-hero .veil{
-  position:absolute; inset:0;
-  /* gelapkan sedikit pinggir2 agar teks kebaca */
-  background:
-    radial-gradient(120% 140% at 50% 50%, rgba(0,0,0,.05) 0%, rgba(0,0,0,.35) 80%),
-    linear-gradient(180deg, rgba(0,0,0,.15), rgba(0,0,0,.05));
-  pointer-events:none;
-}
-
-/* badge nama (kiri & kanan) */
-.couple-hero .name{
-  position:absolute; top:50%; transform:translateY(-50%);
-  max-width:46%;
-  display:flex; flex-direction:column; gap:6px;
-}
-.couple-hero .name.left{ left:14px; }
-.couple-hero .name.right{ right:14px; text-align:right; }
-
-.couple-hero .pill{
-  display:inline-block;
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid #dbe4ef;
-  background:rgba(255,255,255,.86);
-  color:var(--dove);
-  font-weight:700;
-  backdrop-filter:blur(6px);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-  box-shadow:0 8px 18px rgba(0,0,0,.15);
-}
-.couple-hero .sub{
-  display:inline-block;
-  padding:6px 10px;
-  border-radius:10px;
-  border:1px dashed rgba(138,160,184,.6);
-  background:rgba(255,255,255,.78);
-  color:#435568; font-size:13px; font-weight:600;
-  backdrop-filter:blur(6px);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-
-/* responsive: kalau layar kecil, agak turunin yang kanan biar lega */
-@media (max-width:420px){
-  .couple-hero .name.left{ top:42%; }
-  .couple-hero .name.right{ top:62%; }
-}
-    
-
+    #petalsCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;}
   </style>
 </head>
 <body>
@@ -219,8 +121,7 @@
       <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami ingin mengabarkan acara pernikahan kami.</p>
       <h1 class="names">Karina &amp; Alvin</h1>
       <div class="meta">Kamis, 20 November 2025</div>
-      <div class="meta">KJRI Jeddah</div>      
-
+      <div class="meta">KJRI Jeddah</div>
       <div class="cta-row">
         <a id="addCalBtn" class="btn primary" href="#">Simpan ke Kalender</a>
         <a class="btn ghost" href="#peta">Lihat Lokasi</a>
@@ -252,11 +153,26 @@
         <p><strong>Tempat:</strong> Konsulat Jenderal Republik Indonesia (KJRI) — Jeddah</p>
         <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink"></a></p>
       </div>
+
       <div class="card">
         <h3>Mempelai</h3>
+        <!-- VIDEO diletakkan DI BAWAH judul, DI ATAS card Karina -->
+        <div class="media">
+          <video src="video/mempelai.mp4" poster="image/mempelai-poster.jpg"
+                 autoplay muted loop playsinline
+                 onerror="this.outerHTML='<div style=&quot;padding:18px;text-align:center;color:#64748b&quot;>Video mempelai belum tersedia</div>'">
+          </video>
+        </div>
+
         <div class="pair">
-          <div class="person"><div class="name">Karina Dewi Oktaviani</div><div class="parents">Putri dari Bapak Sri Mulyana &amp; Ibu Sri Herlina</div></div>
-          <div class="person"><div class="name">Alvin Rahman Kautsar</div><div class="parents">Putra dari Bapak Joko Umoro Kalbu &amp; Ibu Saripah</div></div>
+          <div class="person">
+            <div class="name">Karina Dewi Oktaviani</div>
+            <div class="parents">Putri dari Bapak Sri Mulyana &amp; Ibu Sri Herlina</div>
+          </div>
+          <div class="person">
+            <div class="name">Alvin Rahman Kautsar</div>
+            <div class="parents">Putra dari Bapak Joko Umoro Kalbu &amp; Ibu Saripah</div>
+          </div>
         </div>
       </div>
     </div>
@@ -267,12 +183,10 @@
     <h2>Galeri</h2>
     <div class="carousel" id="carousel">
       <div class="track" id="track">
-        <!-- Ganti src gambar berikut dengan foto kalian -->
         <img class="slide" src="image/wedding-foto-1.jpeg" alt="Foto 1" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 1)</div>'"/>
         <img class="slide" src="image/wedding-foto-2.jpeg" alt="Foto 2" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 2)</div>'"/>
         <img class="slide" src="image/wedding-foto-3.jpeg" alt="Foto 3" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 3)</div>'"/>
       </div>
-      <!-- Progress bars akan dibuat via JS -->
     </div>
   </section>
 
@@ -289,8 +203,8 @@
           </div>
           <iframe id="mapFrame" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
-        
       </div>
+
       <div class="card">
         <h3>RSVP</h3>
         <p>Mohon konfirmasi kehadiran agar kami dapat mempersiapkan dengan baik.</p>
@@ -319,7 +233,6 @@
       <span class="title" id="audTitle">Somewhere Only We Know</span>
       <div class="bar"><span class="fill" id="audFill"></span></div>
     </div>
-    <!-- penting: muted + autoplay + playsinline -->
     <audio id="bgm" src="audio/lagu.mp3" preload="auto" loop playsinline muted autoplay></audio>
   </div>
 
@@ -334,11 +247,22 @@
       const dt = new Date(EVENT_ISO);
       const start = dt.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z/,'Z');
       const end = new Date(dt.getTime()+60*60*1000).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z/,'Z');
-      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Undangan Karina & Alvin//ID\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nDTSTART:${start}\nDTEND:${end}\nSUMMARY:Akad Nikah — Karina & Alvin\nLOCATION:${MAPS_Q}\nDESCRIPTION:Akad Nikah Karina & Alvin (pukul 11:00 waktu Jeddah)\nEND:VEVENT\nEND:VCALENDAR`;
+      const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Undangan Karina & Alvin//ID
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:${start}
+DTEND:${end}
+SUMMARY:Akad Nikah — Karina & Alvin
+LOCATION:${MAPS_Q}
+DESCRIPTION:Akad Nikah Karina & Alvin (pukul 11:00 waktu Jeddah)
+END:VEVENT
+END:VCALENDAR`;
       const blob = new Blob([ics], {type:'text/calendar'});
       return URL.createObjectURL(blob);
     }
-
     document.getElementById('addCalBtn').addEventListener('click', (e)=>{
       e.preventDefault();
       const url = buildICS();
@@ -354,18 +278,16 @@
     document.getElementById('copyAddr').addEventListener('click', async ()=>{
       try{ await navigator.clipboard.writeText(MAPS_Q); alert('Alamat tersalin: '+MAPS_Q); }catch{ alert('Gagal menyalin alamat'); }
     });
-    const mapFrame = document.getElementById('mapFrame');
-    mapFrame.src = 'https://www.google.com/maps?q=' + encodeURIComponent(MAPS_Q) + '&output=embed';
+    document.getElementById('mapFrame').src = 'https://www.google.com/maps?q=' + encodeURIComponent(MAPS_Q) + '&output=embed';
 
     // ====== COUNTDOWN ======
     const dEl=document.getElementById('d'), hEl=document.getElementById('h'), mEl=document.getElementById('m'), sEl=document.getElementById('s');
     function tick(){
-      const now = new Date();
-      const target = new Date(EVENT_ISO);
+      const now = new Date(), target = new Date(EVENT_ISO);
       let diff = Math.max(0, target - now);
-      const days = Math.floor(diff / (24*60*60*1000)); diff -= days*24*60*60*1000;
-      const hours = Math.floor(diff / (60*60*1000)); diff -= hours*60*60*1000;
-      const mins = Math.floor(diff / (60*1000)); diff -= mins*60*1000;
+      const days = Math.floor(diff / 86400000); diff -= days*86400000;
+      const hours = Math.floor(diff / 3600000); diff -= hours*3600000;
+      const mins = Math.floor(diff / 60000); diff -= mins*60000;
       const secs = Math.floor(diff / 1000);
       dEl.textContent=String(days);
       hEl.textContent=String(hours).padStart(2,'0');
@@ -375,228 +297,140 @@
     tick(); setInterval(tick, 1000);
 
     // ====== REVEAL ON SCROLL ======
-    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); }) }, {threshold:.14});
+    const io = new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on');})},{threshold:.14});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-    // ====== GALERI (FADE + AUTOPLAY 2s + PRESS-TO-PAUSE) ======
+    // ====== GALERI (FADE + AUTO) ======
     const carousel = document.getElementById('carousel');
     const track = document.getElementById('track');
     const slides = Array.from(track.querySelectorAll('.slide'));
-
     const progress = document.createElement('div');
-    progress.className = 'progress';
-    progress.id = 'progress';
-    progress.innerHTML = slides.map(()=>
-      '<span class="bar"><span class="fill"></span></span>'
-    ).join('');
+    progress.className = 'progress'; progress.id = 'progress';
+    progress.innerHTML = slides.map(() => '<span class="bar"><span class="fill"></span></span>').join('');
     carousel.appendChild(progress);
     const fills = Array.from(progress.querySelectorAll('.fill'));
-
-    let gIndex = 0;
-    const DURATION = 2000;  // 2s per slide
-    let startTs = null, elapsed = 0, paused = false;
-
+    let gIndex = 0, startTs = null, elapsed = 0, paused = false;
+    const DURATION = 2000;
     function show(i){
-      const n = slides.length; if(n===0) return; gIndex = (i+n)%n;
-      slides.forEach((el, idx)=> el.classList.toggle('active', idx===gIndex));
-      fills.forEach((f, idx)=>{ f.style.width = idx < gIndex ? '100%' : '0%'; });
-      elapsed = 0; startTs = null;
+      const n = slides.length; if(!n) return; gIndex=(i+n)%n;
+      slides.forEach((el,idx)=>el.classList.toggle('active',idx===gIndex));
+      fills.forEach((f,idx)=>f.style.width = idx<gIndex?'100%':'0%'); elapsed=0; startTs=null;
     }
     show(0);
-
     function step(ts){
-      if(paused){ requestAnimationFrame(step); return; }
-      if(startTs==null) startTs = ts - elapsed;
-      elapsed = ts - startTs;
-      const p = Math.min(1, elapsed / DURATION);
-      if(fills[gIndex]) fills[gIndex].style.width = (p*100).toFixed(2) + '%';
-      if(p >= 1){ show(gIndex + 1); startTs = ts; }
+      if(paused){requestAnimationFrame(step);return;}
+      if(startTs==null) startTs=ts-elapsed;
+      elapsed = ts-startTs;
+      const p = Math.min(1, elapsed/DURATION);
+      if(fills[gIndex]) fills[gIndex].style.width=(p*100).toFixed(2)+'%';
+      if(p>=1){show(gIndex+1); startTs=ts;}
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
-
-    [carousel, track].forEach(el=>{
-      el.addEventListener('pointerdown', ()=>{ paused = true; });
-      el.addEventListener('pointerup',   ()=>{ paused = false; });
-      el.addEventListener('pointercancel',()=>{ paused = false; });
-      el.addEventListener('pointerleave', ()=>{ paused = false; });
+    [carousel,track].forEach(el=>{
+      el.addEventListener('pointerdown',()=>{paused=true;});
+      el.addEventListener('pointerup',()=>{paused=false;});
+      el.addEventListener('pointercancel',()=>{paused=false;});
+      el.addEventListener('pointerleave',()=>{paused=false;});
     });
-    document.addEventListener('visibilitychange', ()=>{ paused = document.hidden; });
+    document.addEventListener('visibilitychange',()=>{paused=document.hidden;});
 
     // ====== CANVAS PETALS ======
     const canvas = document.getElementById('petalsCanvas');
     const hero = document.getElementById('hero');
     const ctx = canvas.getContext('2d');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    let W=0,H=0,DPR= Math.min(2, window.devicePixelRatio || 1);
-
+    let W=0,H=0,DPR=Math.min(2,window.devicePixelRatio||1);
     function resizeCanvas(){
-      W = hero.clientWidth; H = hero.clientHeight;
-      canvas.width = Math.max(1, Math.floor(W*DPR));
-      canvas.height = Math.max(1, Math.floor(H*DPR));
-      canvas.style.width = W+'px'; canvas.style.height = H+'px';
+      W=hero.clientWidth; H=hero.clientHeight;
+      canvas.width=Math.max(1,Math.floor(W*DPR));
+      canvas.height=Math.max(1,Math.floor(H*DPR));
+      canvas.style.width=W+'px'; canvas.style.height=H+'px';
       ctx.setTransform(DPR,0,0,DPR,0,0);
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-
-    function rand(a,b){ return a + Math.random()*(b-a); }
-    const COUNT = reduce? 12 : 28;
-    const petals = Array.from({length:COUNT}, ()=>spawn());
-
-    function spawn(){
-      return {
-        x: rand(0, W),
-        y: rand(-H, 0),
-        r: rand(8, 18),
-        vy: rand(25, 55),
-        vx: rand(-10, 10),
-        rot: rand(0, Math.PI*2),
-        vr: rand(-0.8, 0.8),
-        sway: rand(0.8, 1.6),
-        hue: rand(205, 215)
-      };
-    }
-
+    resizeCanvas(); window.addEventListener('resize',resizeCanvas);
+    function rand(a,b){return a+Math.random()*(b-a)}
+    const COUNT=reduce?12:28;
+    const petals=Array.from({length:COUNT},()=>spawn());
+    function spawn(){return{x:rand(0,W),y:rand(-H,0),r:rand(8,18),vy:rand(25,55),vx:rand(-10,10),rot:rand(0,Math.PI*2),vr:rand(-0.8,0.8),sway:rand(0.8,1.6),hue:rand(205,215)}}
     let last=performance.now();
     function drawFlower(x,y,r,rot,hue){
-      ctx.save();
-      ctx.translate(x,y); ctx.rotate(rot);
-      const petalCount = 5;
+      ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+      const petalCount=5;
       for(let i=0;i<petalCount;i++){
         ctx.rotate((Math.PI*2)/petalCount);
         ctx.beginPath();
-        ctx.ellipse(0, r*0.55, r*0.38, r*0.22, 0, 0, Math.PI*2);
-        const grad = ctx.createRadialGradient(0, r*0.55, 0.05, 0, r*0.55, r*0.45);
-        grad.addColorStop(0, `hsla(${hue}, 60%, 92%, .95)`);
-        grad.addColorStop(1, `hsla(${hue}, 55%, 60%, .85)`);
-        ctx.fillStyle = grad; ctx.fill();
-        ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 0.8; ctx.stroke();
+        ctx.ellipse(0,r*0.55,r*0.38,r*0.22,0,0,Math.PI*2);
+        const grad=ctx.createRadialGradient(0,r*0.55,r*0.05,0,r*0.55,r*0.45);
+        grad.addColorStop(0,`hsla(${hue},60%,92%,.95)`); grad.addColorStop(1,`hsla(${hue},55%,60%,.85)`);
+        ctx.fillStyle=grad; ctx.fill(); ctx.strokeStyle='rgba(255,255,255,.6)'; ctx.lineWidth=.8; ctx.stroke();
       }
-      ctx.beginPath(); ctx.arc(0,0,r*0.22,0,Math.PI*2);
-      ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fill();
-      ctx.restore();
+      ctx.beginPath(); ctx.arc(0,0,r*0.22,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,.85)'; ctx.fill(); ctx.restore();
     }
-
     function loop(t){
-      const dt = Math.min(0.05, (t-last)/1000); last=t;
-      ctx.clearRect(0,0,W,H);
+      const dt=Math.min(0.05,(t-last)/1000); last=t; ctx.clearRect(0,0,W,H);
       for(const p of petals){
-        p.y += p.vy*dt;
-        p.x += (p.vx + Math.sin((t*0.001)+p.y*0.02)*12*p.sway)*dt;
-        p.rot += p.vr*dt;
-        drawFlower(p.x, p.y, p.r, p.rot, p.hue);
-        if(p.y - p.r > H + 10){
-          const np = spawn(); np.y = -np.r; p.x=np.x; p.y=np.y; p.r=np.r; p.vy=np.vy; p.vx=np.vx; p.rot=np.rot; p.vr=np.vr; p.sway=np.sway; p.hue=np.hue;
-        }
-      }
-      requestAnimationFrame(loop);
-    }
-    requestAnimationFrame(loop);
+        p.y+=p.vy*dt; p.x+=(p.vx+Math.sin((t*0.001)+p.y*0.02)*12*p.sway)*dt; p.rot+=p.vr*dt; drawFlower(p.x,p.y,p.r,p.rot,p.hue);
+        if(p.y-p.r>H+10){const np=spawn(); np.y=-np.r; Object.assign(p,np);}
+      } requestAnimationFrame(loop);
+    } requestAnimationFrame(loop);
 
     // ====== AUDIO MINI PLAYER ======
-    const audio   = document.getElementById('bgm');
-    const audBtn  = document.getElementById('audioToggle');
-    const audFill = document.getElementById('audFill');
-    const audTitle= document.getElementById('audTitle');
-
-    audTitle.textContent = 'Somewhere Only We Know';
-    audio.volume = 0.85; // target volume (akan di-fade-in)
-
+    const audio=document.getElementById('bgm');
+    const audBtn=document.getElementById('audioToggle');
+    const audFill=document.getElementById('audFill');
+    const audTitle=document.getElementById('audTitle');
+    audTitle.textContent='Somewhere Only We Know';
+    audio.volume=0.85;
     function updateUI(){
-      const isAudible = !audio.muted && !audio.paused;
-      audBtn.textContent = isAudible ? '❚❚' : '▶';
-      audBtn.setAttribute('aria-label', isAudible ? 'Jeda musik' : 'Putar musik');
-      const p = (audio.duration ? (audio.currentTime / audio.duration) : 0) * 100;
-      audFill.style.width = p + '%';
+      const isAudible=!audio.muted && !audio.paused;
+      audBtn.textContent=isAudible?'❚❚':'▶';
+      audBtn.setAttribute('aria-label',isAudible?'Jeda musik':'Putar musik');
+      const p=(audio.duration?(audio.currentTime/audio.duration):0)*100; audFill.style.width=p+'%';
     }
     updateUI();
-
-    audBtn.addEventListener('click', async () => {
+    audBtn.addEventListener('click',async ()=>{
       try{
-        if(audio.paused){ audio.muted = false; await audio.play(); }
-        else if(audio.muted){ audio.muted = false; }
-        else { audio.pause(); }
-      }catch(e){ /* ignore */ }
-      updateUI();
+        if(audio.paused){audio.muted=false; await audio.play();}
+        else if(audio.muted){audio.muted=false;}
+        else{audio.pause();}
+      }catch(e){} updateUI();
     });
+    audio.addEventListener('timeupdate',updateUI);
+    audio.addEventListener('play',updateUI);
+    audio.addEventListener('pause',updateUI);
+    audio.addEventListener('ended',updateUI);
+    document.addEventListener('visibilitychange',()=>{if(document.hidden) audio.pause(); else audio.play().catch(()=>{});});
 
-    audio.addEventListener('timeupdate', updateUI);
-    audio.addEventListener('play', updateUI);
-    audio.addEventListener('pause', updateUI);
-    audio.addEventListener('ended', updateUI);
-
-    // pause saat tab ditinggal, resume saat balik
-    document.addEventListener('visibilitychange', ()=>{
-      if(document.hidden) audio.pause();
-      else audio.play().catch(()=>{});
-    });
-
-    /* ==== AUTOPLAY AMAN: play saat load (muted), lalu unmute + fade-in; fallback gesture ==== */
+    // Autoplay aman (mute -> unmute + fade-in saat memungkinkan)
     (async function initAutoplay(){
-      const TARGET_VOL = 0.85;
-
-      // start muted autoplay — mayoritas browser allow
-      audio.muted  = true;
-      audio.volume = 0;
-      const tryPlaySilent = async () => { try { await audio.play(); } catch(_){} };
-      if (document.readyState === 'complete' || document.readyState === 'interactive') {
-        tryPlaySilent();
-      } else {
-        document.addEventListener('DOMContentLoaded', tryPlaySilent, {once:true});
-      }
-
-      // coba langsung unmute + fade-in (kalau diizinkan)
-      const tryUnmute = async () => {
-        try {
-          audio.muted = false;
-          if(audio.paused) await audio.play();
-          // fade-in halus
-          let v = 0;
-          const step = () => {
-            v = Math.min(TARGET_VOL, v + 0.05);
-            audio.volume = v;
-            if (v < TARGET_VOL) requestAnimationFrame(step);
-          };
-          requestAnimationFrame(step);
-          updateUI();
-          detach();
-        } catch(e) { /* kalau ditolak, tunggu gesture */ }
+      const TARGET_VOL=0.85; audio.muted=true; audio.volume=0;
+      const tryPlaySilent=async()=>{try{await audio.play();}catch{}};
+      if(document.readyState==='complete'||document.readyState==='interactive'){tryPlaySilent();}
+      else{document.addEventListener('DOMContentLoaded',tryPlaySilent,{once:true});}
+      const tryUnmute=async()=>{
+        try{
+          audio.muted=false; if(audio.paused) await audio.play();
+          let v=0; const step=()=>{v=Math.min(TARGET_VOL,v+0.05); audio.volume=v; if(v<TARGET_VOL) requestAnimationFrame(step);};
+          requestAnimationFrame(step); updateUI(); detach();
+        }catch(e){}
       };
-      // nudge beberapa kali (handle decoding delay)
-      [200, 600, 1200].forEach(t=> setTimeout(tryUnmute, t));
-
-      // fallback: gesture pertama (tap/klik/scroll keydown) -> unmute + play + fade-in
-      function onFirstGesture(){
-        audio.muted = false;
-        if(audio.paused) audio.play().catch(()=>{});
-        let v = 0; audio.volume = 0;
-        const step = () => {
-          v = Math.min(TARGET_VOL, v + 0.05);
-          audio.volume = v;
-          if (v < TARGET_VOL) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-        updateUI();
-        detach();
+      [200,600,1200].forEach(t=>setTimeout(tryUnmute,t));
+      function onFirstGesture(){audio.muted=false; if(audio.paused) audio.play().catch(()=>{}); let v=0; audio.volume=0;
+        const step=()=>{v=Math.min(TARGET_VOL,v+0.05); audio.volume=v; if(v<TARGET_VOL) requestAnimationFrame(step);};
+        requestAnimationFrame(step); updateUI(); detach();
       }
-      function detach(){
-        ['pointerdown','touchstart','click','keydown'].forEach(ev =>
-          document.removeEventListener(ev, onFirstGesture, true)
-        );
-      }
-      ['pointerdown','touchstart','click','keydown'].forEach(ev =>
-        document.addEventListener(ev, onFirstGesture, { once:true, passive:true, capture:true })
-      );
+      function detach(){['pointerdown','touchstart','click','keydown'].forEach(ev=>document.removeEventListener(ev,onFirstGesture,true));}
+      ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,passive:true,capture:true}));
     })();
 
-    // ====== Event done ======
+    // ====== Event done note ======
     (function(){
-      const target = new Date(EVENT_ISO);
-      if(Date.now() > +target){
-        const c = document.getElementById('hitung-mundur');
-        c.querySelector('h2').textContent = 'Acara telah berlangsung';
-        c.querySelector('.count-grid').outerHTML = '<p class="muted">Alhamdulillah, acara telah diselenggarakan. Terima kasih atas doa dan kehadiran Anda.</p>';
+      const target=new Date(EVENT_ISO);
+      if(Date.now()>+target){
+        const c=document.getElementById('hitung-mundur');
+        c.querySelector('h2').textContent='Acara telah berlangsung';
+        c.querySelector('.count-grid').outerHTML='<p class="muted">Alhamdulillah, acara telah diselenggarakan. Terima kasih atas doa dan kehadiran Anda.</p>';
       }
     })();
   </script>
