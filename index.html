@@ -69,12 +69,17 @@
     .person .name{font-weight:700;color:var(--dove)}
     .person .parents{color:#435568;font-size:14px;margin-top:2px}
 
-    /* --- CAROUSEL --- */
+    /* --- GALERI (FADE, STORY STYLE) --- */
     .carousel{position:relative; overflow:hidden;}
-    .track{display:flex; will-change:transform; touch-action: pan-y; user-select:none;}
-    .slide{flex:0 0 100%; aspect-ratio: 16/9; width:100%; height:auto; object-fit:cover; background:linear-gradient(135deg,#edf2f7,#dbe7f3); display:grid; place-items:center; color:#64748b; font-weight:600}
-    .nav{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 6px;pointer-events:none}
-    .nav button{pointer-events:auto;background:rgba(255,255,255,.9);border:1px solid #d1d9e4;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;box-shadow:0 8px 18px rgba(0,0,0,.15);cursor:pointer}
+    .track{position:relative; aspect-ratio:16/9; touch-action:none; user-select:none;}
+    .slide{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 2s ease;}
+    .slide.active{opacity:1}
+    /* progress bar ala story */
+    .progress{position:absolute; left:12px; right:12px; top:10px; display:flex; gap:6px; z-index:3}
+    .progress .bar{flex:1; height:4px; background:rgba(255,255,255,.35); border-radius:999px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
+    .progress .fill{height:100%; width:0%; background:#fff; border-radius:inherit}
+    /* sembunyikan tombol prev/next */
+    .nav{display:none !important}
 
     /* --- MAP CARD --- */
     .map-card{ position:relative; border:1px solid #dbe4ef; border-radius:16px; overflow:hidden; box-shadow:0 10px 24px var(--ring); }
@@ -82,19 +87,6 @@
     .map-card .actions{ position:absolute; right:12px; bottom:12px; z-index:2; display:flex; gap:8px; }
     .btn.small{ padding:8px 12px; border-radius:10px; font-weight:600; border:1px solid #dbe4ef; background:#fff; color:var(--dove); box-shadow:0 8px 16px rgba(0,0,0,.08); }
     .map-card iframe{ width:100%; height:100%; aspect-ratio:16/9; border:0; filter:saturate(1.05) contrast(1.05); }
-
-    /* --- LAYOUT: Lokasi & RSVP --- */
-.row{
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 28px;              /* jarak vertikal antar box di mobile */
-}
-@media (min-width: 760px){
-  .row{
-    grid-template-columns: 1.2fr .8fr;
-    gap: 24px;            /* jarak horizontal di desktop/tablet */
-  }
-}
 
     /* --- FOOTER --- */
     footer{background:linear-gradient(180deg,#f3f7fb, #e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
@@ -147,7 +139,7 @@
         <h3>Waktu &amp; Tempat</h3>
         <p><strong>Akad:</strong> Kamis, 20 November 2025, <strong>pukul 11:00</strong> (Waktu Jeddah)</p>
         <p><strong>Tempat:</strong> Konsulat Jenderal Republik Indonesia (KJRI) — Jeddah</p>
-        <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink"></a></p>
+        <p id="lokasi" style="margin-top:8px"><a href="#" id="mapsLink">Buka di Google Maps</a></p>
       </div>
       <div class="card">
         <h3>Mempelai</h3>
@@ -189,13 +181,13 @@
           </div>
           <iframe id="mapFrame" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
-        <small></small>
+        <small>Jika peta tidak tampil, tombol "Buka Maps" tetap berfungsi.</small>
       </div>
       <div class="card">
         <h3>RSVP</h3>
         <p>Mohon konfirmasi kehadiran agar kami dapat mempersiapkan dengan baik.</p>
-        <p><a class="btn primary" id="waBtn" href="https://wa.me/6285607551162?text=Assalamualaikum%2C%20saya%20akan%20hadir%20di%20acara%20Karina%20%26%20Alvin%20insyaAllah." target="_blank" rel="noreferrer">Konfirmasi via WhatsApp</a></p>
-        <small></small>
+        <p><a class="btn primary" id="waBtn" href="https://wa.me/6281234567890?text=Assalamualaikum%2C%20saya%20akan%20hadir%20di%20acara%20Karina%20%26%20Alvin%20insyaAllah." target="_blank" rel="noreferrer">Konfirmasi via WhatsApp</a></p>
+        <small>Ganti nomor WhatsApp pada tautan di atas.</small>
       </div>
     </div>
   </section>
@@ -267,40 +259,59 @@
     const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); }) }, {threshold:.14});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-    // ====== CAROUSEL (pixel-based, swipe smooth + flick) ======
+    // ====== GALERI (FADE + AUTOPLAY 2s + PROGRESS + PRESS-TO-PAUSE) ======
+    const carousel = document.getElementById('carousel');
     const track = document.getElementById('track');
-    const viewport = document.getElementById('carousel');
-    const prev = document.getElementById('prev');
-    const next = document.getElementById('next');
-    let index=0;
+    const slides = Array.from(track.querySelectorAll('.slide'));
 
-    const slideCount = () => track.children.length;
+    // build progress bars
+    const progress = document.createElement('div');
+    progress.className = 'progress';
+    progress.id = 'progress';
+    progress.innerHTML = slides.map(()=>'\n      <span class="bar"><span class="fill"></span></span>\n    ').join('');
+    carousel.appendChild(progress);
+    const fills = Array.from(progress.querySelectorAll('.fill'));
 
-    function applyPx(dx=0, animate=true){
-      const w = viewport.clientWidth; // lebar view
-      const x = -index * w + dx;
-      track.style.transition = animate ? 'transform .45s cubic-bezier(.22,.61,.36,1)' : 'none';
-      track.style.transform = `translate3d(${x}px,0,0)`;
+    let gIndex = 0;                 // current slide
+    const DURATION = 2000;          // 2s per slide
+    let startTs = null;             // rAF timestamp start
+    let elapsed = 0;                // ms elapsed in current slide
+    let paused = false;             // pause state
+
+    function show(i){
+      const n = slides.length; if(n===0) return; gIndex = (i+n)%n;
+      slides.forEach((el, idx)=> el.classList.toggle('active', idx===gIndex));
+      fills.forEach((f, idx)=>{ f.style.width = idx < gIndex ? '100%' : '0%'; });
+      // reset current
+      elapsed = 0; startTs = null;
     }
-    function go(i){ const n = slideCount(); index = (i+n)%n; applyPx(0,true); }
-    prev?.addEventListener('click',()=>go(index-1));
-    next?.addEventListener('click',()=>go(index+1));
+    show(0);
 
-    // drag / swipe + flick velocity
-    let startX=0, dx=0, dragging=false, pid=null, t0=0;
-    track.addEventListener('pointerdown',e=>{ dragging=true; startX=e.clientX; dx=0; pid=e.pointerId; t0=performance.now(); track.setPointerCapture?.(pid); applyPx(0,false); });
-    track.addEventListener('pointermove',e=>{ if(!dragging) return; dx=e.clientX-startX; applyPx(dx,false); });
-    function endDrag(){
-      if(!dragging) return; dragging=false; const w=viewport.clientWidth; const dt=(performance.now()-t0)||1; const v=dx/dt; // px per ms
-      const flick = Math.abs(v)>0.5; // cepat
-      const far = Math.abs(dx)/w>0.12; // jauh
-      if(flick || far){ go(index + (dx<0?1:-1)); } else { applyPx(0,true); }
-      dx=0; pid=null; }
-    track.addEventListener('pointerup', endDrag);
-    track.addEventListener('pointercancel', endDrag);
-    track.addEventListener('pointerleave', ()=>{ if(dragging) endDrag(); });
-    window.addEventListener('resize', ()=>applyPx(0,false));
-    applyPx(0,false);
+    function step(ts){
+      if(paused){ requestAnimationFrame(step); return; }
+      if(startTs==null) startTs = ts - elapsed; // resume point
+      elapsed = ts - startTs;
+      const p = Math.min(1, elapsed / DURATION);
+      if(fills[gIndex]) fills[gIndex].style.width = (p*100).toFixed(2) + '%';
+      if(p >= 1){
+        show(gIndex + 1);
+        startTs = ts; // continue next immediately
+      }
+      requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+
+    // PRESS to pause, release to resume
+    const pressTargets = [carousel, track];
+    pressTargets.forEach(el=>{
+      el.addEventListener('pointerdown', ()=>{ paused = true; });
+      el.addEventListener('pointerup',   ()=>{ paused = false; });
+      el.addEventListener('pointercancel',()=>{ paused = false; });
+      el.addEventListener('pointerleave', ()=>{ paused = false; });
+    });
+
+    // pause when not visible
+    document.addEventListener('visibilitychange', ()=>{ paused = document.hidden; });
 
     // ====== CANVAS PETALS (blue flowers) ======
     const canvas = document.getElementById('petalsCanvas');
