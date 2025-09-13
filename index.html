@@ -74,7 +74,6 @@
     .track{position:relative; aspect-ratio:16/9; touch-action:none; user-select:none;}
     .slide{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition: opacity 2s ease;}
     .slide.active{opacity:1}
-    /* progress bar ala story */
     .progress{position:absolute; left:12px; right:12px; top:10px; display:flex; gap:6px; z-index:3}
     .progress .bar{flex:1; height:4px; background:rgba(255,255,255,.35); border-radius:999px; overflow:hidden; box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
     .progress .fill{height:100%; width:0%; background:#fff; border-radius:inherit}
@@ -129,11 +128,14 @@
   <header class="hero" id="hero">
     <canvas id="petalsCanvas"></canvas>
     <div class="hero-inner">
-      <div class="badge">Undangan Pernikahan</div>
+      <div class="badge">KABAR PERNIKAHAN</div>
       <div class="basmalah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+      <p style="margin:15px 0 0;opacity:.9">Assalamualaikum Warahmatullahi Wabarakatuh.</p>
+      <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami ingin mengabarkan acara pernikahan kami.</p>
       <h1 class="names">Karina &amp; Alvin</h1>
-      <div class="meta">Kamis, 20 November 2025<span class="dot">•</span>KJRI Jeddah</div>
-      <p style="margin:14px 0 0;opacity:.9">Assalamualaikum Warahmatullahi Wabarakatuh. Tanpa mengurangi rasa hormat, kami mengundang Anda untuk hadir pada acara pernikahan kami.</p>
+      <div class="meta">Kamis, 20 November 2025</div>
+      <div class="meta">KJRI Jeddah</div>      
+
       <div class="cta-row">
         <a id="addCalBtn" class="btn primary" href="#">Simpan ke Kalender</a>
         <a class="btn ghost" href="#lokasi">Lihat Lokasi</a>
@@ -229,12 +231,13 @@
       <span class="title" id="audTitle">Somewhere Only We Know</span>
       <div class="bar"><span class="fill" id="audFill"></span></div>
     </div>
-    <audio id="bgm" src="audio/lagu.mp3" preload="auto" loop></audio>
+    <!-- penting: muted + autoplay + playsinline -->
+    <audio id="bgm" src="audio/lagu.mp3" preload="auto" loop playsinline muted autoplay></audio>
   </div>
 
   <script>
     // ====== CONFIG ======
-    const EVENT_ISO = '2025-11-20T11:00:00+03:00'; // Jeddah (UTC+3)
+    const EVENT_ISO = '2025-11-20T11:00:00+03:00';
     const MAPS_Q = 'KJRI Jeddah';
     const MAPS_URL = 'https://maps.google.com/?q=' + encodeURIComponent(MAPS_Q);
 
@@ -287,61 +290,52 @@
     const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); }) }, {threshold:.14});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-    // ====== GALERI (FADE + AUTOPLAY 2s + PROGRESS + PRESS-TO-PAUSE) ======
+    // ====== GALERI (FADE + AUTOPLAY 2s + PRESS-TO-PAUSE) ======
     const carousel = document.getElementById('carousel');
     const track = document.getElementById('track');
     const slides = Array.from(track.querySelectorAll('.slide'));
 
-    // build progress bars
     const progress = document.createElement('div');
     progress.className = 'progress';
     progress.id = 'progress';
-    progress.innerHTML = slides.map(()=>'\n      <span class="bar"><span class="fill"></span></span>\n    ').join('');
+    progress.innerHTML = slides.map(()=>
+      '<span class="bar"><span class="fill"></span></span>'
+    ).join('');
     carousel.appendChild(progress);
     const fills = Array.from(progress.querySelectorAll('.fill'));
 
-    let gIndex = 0;                 // current slide
-    const DURATION = 2000;          // 2s per slide
-    let startTs = null;             // rAF timestamp start
-    let elapsed = 0;                // ms elapsed in current slide
-    let paused = false;             // pause state
+    let gIndex = 0;
+    const DURATION = 2000;  // 2s per slide
+    let startTs = null, elapsed = 0, paused = false;
 
     function show(i){
       const n = slides.length; if(n===0) return; gIndex = (i+n)%n;
       slides.forEach((el, idx)=> el.classList.toggle('active', idx===gIndex));
       fills.forEach((f, idx)=>{ f.style.width = idx < gIndex ? '100%' : '0%'; });
-      // reset current
       elapsed = 0; startTs = null;
     }
     show(0);
 
     function step(ts){
       if(paused){ requestAnimationFrame(step); return; }
-      if(startTs==null) startTs = ts - elapsed; // resume point
+      if(startTs==null) startTs = ts - elapsed;
       elapsed = ts - startTs;
       const p = Math.min(1, elapsed / DURATION);
       if(fills[gIndex]) fills[gIndex].style.width = (p*100).toFixed(2) + '%';
-      if(p >= 1){
-        show(gIndex + 1);
-        startTs = ts; // continue next immediately
-      }
+      if(p >= 1){ show(gIndex + 1); startTs = ts; }
       requestAnimationFrame(step);
     }
     requestAnimationFrame(step);
 
-    // PRESS to pause, release to resume
-    const pressTargets = [carousel, track];
-    pressTargets.forEach(el=>{
+    [carousel, track].forEach(el=>{
       el.addEventListener('pointerdown', ()=>{ paused = true; });
       el.addEventListener('pointerup',   ()=>{ paused = false; });
       el.addEventListener('pointercancel',()=>{ paused = false; });
       el.addEventListener('pointerleave', ()=>{ paused = false; });
     });
-
-    // pause when not visible
     document.addEventListener('visibilitychange', ()=>{ paused = document.hidden; });
 
-    // ====== CANVAS PETALS (blue flowers) ======
+    // ====== CANVAS PETALS ======
     const canvas = document.getElementById('petalsCanvas');
     const hero = document.getElementById('hero');
     const ctx = canvas.getContext('2d');
@@ -359,7 +353,6 @@
     window.addEventListener('resize', resizeCanvas);
 
     function rand(a,b){ return a + Math.random()*(b-a); }
-
     const COUNT = reduce? 12 : 28;
     const petals = Array.from({length:COUNT}, ()=>spawn());
 
@@ -367,13 +360,13 @@
       return {
         x: rand(0, W),
         y: rand(-H, 0),
-        r: rand(8, 18),        // size
-        vy: rand(25, 55),      // vertical speed px/s
-        vx: rand(-10, 10),     // horizontal drift px/s
+        r: rand(8, 18),
+        vy: rand(25, 55),
+        vx: rand(-10, 10),
         rot: rand(0, Math.PI*2),
-        vr: rand(-0.8, 0.8),   // rotation speed rad/s
-        sway: rand(0.8, 1.6),  // sway amplitude factor
-        hue: rand(205, 215)    // blue-ish
+        vr: rand(-0.8, 0.8),
+        sway: rand(0.8, 1.6),
+        hue: rand(205, 215)
       };
     }
 
@@ -385,29 +378,27 @@
       for(let i=0;i<petalCount;i++){
         ctx.rotate((Math.PI*2)/petalCount);
         ctx.beginPath();
-        // ellipse petal
         ctx.ellipse(0, r*0.55, r*0.38, r*0.22, 0, 0, Math.PI*2);
-        const grad = ctx.createRadialGradient(0, r*0.55, r*0.05, 0, r*0.55, r*0.45);
+        const grad = ctx.createRadialGradient(0, r*0.55, 0.05, 0, r*0.55, r*0.45);
         grad.addColorStop(0, `hsla(${hue}, 60%, 92%, .95)`);
         grad.addColorStop(1, `hsla(${hue}, 55%, 60%, .85)`);
         ctx.fillStyle = grad; ctx.fill();
         ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 0.8; ctx.stroke();
       }
-      // center
       ctx.beginPath(); ctx.arc(0,0,r*0.22,0,Math.PI*2);
       ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fill();
       ctx.restore();
     }
 
     function loop(t){
-      const dt = Math.min(0.05, (t-last)/1000); last=t; // clamp dt
+      const dt = Math.min(0.05, (t-last)/1000); last=t;
       ctx.clearRect(0,0,W,H);
       for(const p of petals){
         p.y += p.vy*dt;
         p.x += (p.vx + Math.sin((t*0.001)+p.y*0.02)*12*p.sway)*dt;
         p.rot += p.vr*dt;
         drawFlower(p.x, p.y, p.r, p.rot, p.hue);
-        if(p.y - p.r > H + 10){ // recycle
+        if(p.y - p.r > H + 10){
           const np = spawn(); np.y = -np.r; p.x=np.x; p.y=np.y; p.r=np.r; p.vy=np.vy; p.vx=np.vx; p.rot=np.rot; p.vr=np.vr; p.sway=np.sway; p.hue=np.hue;
         }
       }
@@ -421,21 +412,24 @@
     const audFill = document.getElementById('audFill');
     const audTitle= document.getElementById('audTitle');
 
-    audTitle.textContent = 'Somewhere Only We Know'; // ubah judul di sini
-    audio.volume = 0.85; // volume awal
-    updateUI();
+    audTitle.textContent = 'Somewhere Only We Know';
+    audio.volume = 0.85; // target volume (akan di-fade-in)
 
     function updateUI(){
-      audBtn.textContent = audio.paused ? '▶' : '❚❚';
-      audBtn.setAttribute('aria-label', audio.paused ? 'Putar musik' : 'Jeda musik');
+      const isAudible = !audio.muted && !audio.paused;
+      audBtn.textContent = isAudible ? '❚❚' : '▶';
+      audBtn.setAttribute('aria-label', isAudible ? 'Jeda musik' : 'Putar musik');
       const p = (audio.duration ? (audio.currentTime / audio.duration) : 0) * 100;
       audFill.style.width = p + '%';
     }
+    updateUI();
 
     audBtn.addEventListener('click', async () => {
       try{
-        if(audio.paused){ await audio.play(); } else { audio.pause(); }
-      }catch(e){ console.warn(e); }
+        if(audio.paused){ audio.muted = false; await audio.play(); }
+        else if(audio.muted){ audio.muted = false; }
+        else { audio.pause(); }
+      }catch(e){ /* ignore */ }
       updateUI();
     });
 
@@ -444,8 +438,69 @@
     audio.addEventListener('pause', updateUI);
     audio.addEventListener('ended', updateUI);
 
-    // pause saat tab ditinggal
-    document.addEventListener('visibilitychange', ()=>{ if(document.hidden) audio.pause(); });
+    // pause saat tab ditinggal, resume saat balik
+    document.addEventListener('visibilitychange', ()=>{
+      if(document.hidden) audio.pause();
+      else audio.play().catch(()=>{});
+    });
+
+    /* ==== AUTOPLAY AMAN: play saat load (muted), lalu unmute + fade-in; fallback gesture ==== */
+    (async function initAutoplay(){
+      const TARGET_VOL = 0.85;
+
+      // start muted autoplay — mayoritas browser allow
+      audio.muted  = true;
+      audio.volume = 0;
+      const tryPlaySilent = async () => { try { await audio.play(); } catch(_){} };
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        tryPlaySilent();
+      } else {
+        document.addEventListener('DOMContentLoaded', tryPlaySilent, {once:true});
+      }
+
+      // coba langsung unmute + fade-in (kalau diizinkan)
+      const tryUnmute = async () => {
+        try {
+          audio.muted = false;
+          if(audio.paused) await audio.play();
+          // fade-in halus
+          let v = 0;
+          const step = () => {
+            v = Math.min(TARGET_VOL, v + 0.05);
+            audio.volume = v;
+            if (v < TARGET_VOL) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+          updateUI();
+          detach();
+        } catch(e) { /* kalau ditolak, tunggu gesture */ }
+      };
+      // nudge beberapa kali (handle decoding delay)
+      [200, 600, 1200].forEach(t=> setTimeout(tryUnmute, t));
+
+      // fallback: gesture pertama (tap/klik/scroll keydown) -> unmute + play + fade-in
+      function onFirstGesture(){
+        audio.muted = false;
+        if(audio.paused) audio.play().catch(()=>{});
+        let v = 0; audio.volume = 0;
+        const step = () => {
+          v = Math.min(TARGET_VOL, v + 0.05);
+          audio.volume = v;
+          if (v < TARGET_VOL) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        updateUI();
+        detach();
+      }
+      function detach(){
+        ['pointerdown','touchstart','click','keydown'].forEach(ev =>
+          document.removeEventListener(ev, onFirstGesture, true)
+        );
+      }
+      ['pointerdown','touchstart','click','keydown'].forEach(ev =>
+        document.addEventListener(ev, onFirstGesture, { once:true, passive:true, capture:true })
+      );
+    })();
 
     // ====== Event done ======
     (function(){
