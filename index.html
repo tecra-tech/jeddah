@@ -70,9 +70,12 @@
     .nav{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:center;padding:0 6px;pointer-events:none}
     .nav button{pointer-events:auto;background:rgba(255,255,255,.9);border:1px solid #d1d9e4;border-radius:50%;width:42px;height:42px;display:grid;place-items:center;box-shadow:0 8px 18px rgba(0,0,0,.15);cursor:pointer}
 
-    /* --- LOCATION / RSVP --- */
-    .row{display:grid;grid-template-columns:1fr;gap:16px}
-    .qr{width:130px;height:130px;border:1px dashed var(--dove-weak);border-radius:10px;display:grid;place-items:center;color:#6b7d90;margin-top:8px}
+    /* --- MAP CARD --- */
+    .map-card{ position:relative; border:1px solid #dbe4ef; border-radius:16px; overflow:hidden; box-shadow:0 10px 24px var(--ring); }
+    .map-card header{ position:absolute; left:12px; top:12px; z-index:2; background:rgba(255,255,255,.9); border:1px solid #dbe4ef; padding:8px 10px; border-radius:10px; font-weight:600; color:var(--dove); }
+    .map-card .actions{ position:absolute; right:12px; bottom:12px; z-index:2; display:flex; gap:8px; }
+    .btn.small{ padding:8px 12px; border-radius:10px; font-weight:600; border:1px solid #dbe4ef; background:#fff; color:var(--dove); box-shadow:0 8px 16px rgba(0,0,0,.08); }
+    .map-card iframe{ width:100%; height:100%; aspect-ratio:16/9; border:0; filter:saturate(1.05) contrast(1.05); }
 
     /* --- FOOTER --- */
     footer{background:linear-gradient(180deg,#f3f7fb, #e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
@@ -82,10 +85,8 @@
     .reveal{opacity:0;transform:translateY(16px);transition:all .7s ease}
     .reveal.on{opacity:1;transform:none}
 
-    /* --- Falling blue flowers --- */
-    .falling-flowers{ position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:2; }
-    .flower{ position:absolute; top:-12vh; left:0; transform:translateX(var(--x)); font-size: clamp(12px, 2.8vw, 22px); color:#7fb0e1; text-shadow:0 0 10px rgba(127,176,225,.45); opacity:.95; filter: drop-shadow(0 4px 8px rgba(32,54,76,.25)); animation: fall var(--dur)s linear var(--delay)s infinite; }
-    @keyframes fall{ from{ transform: translate3d(calc(var(--x)), -12vh, 0) rotate(0deg);} to{ transform: translate3d(calc(var(--x) + var(--drift)), 110vh, 0) rotate(360deg);} }
+    /* --- Canvas petals --- */
+    #petalsCanvas{ position:absolute; inset:0; z-index:2; pointer-events:none; }
 
     /* --- Responsive --- */
     @media(min-width:760px){ .grid-2{grid-template-columns:1fr 1fr} .row{grid-template-columns:1.2fr .8fr} }
@@ -93,7 +94,8 @@
 </head>
 <body>
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero" id="hero">
+    <canvas id="petalsCanvas"></canvas>
     <div class="hero-inner">
       <div class="badge">Undangan Pernikahan</div>
       <div class="basmalah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
@@ -105,7 +107,6 @@
         <a class="btn ghost" href="#lokasi">Lihat Lokasi</a>
       </div>
     </div>
-    <div class="falling-flowers" id="flowers" aria-hidden="true"></div>
     <div class="wave" aria-hidden="true"></div>
   </header>
 
@@ -161,9 +162,15 @@
     <div class="row">
       <div class="card">
         <h3>Lokasi</h3>
-        <p>KJRI Jeddah — Arab Saudi</p>
-        <div class="qr">QR Lokasi</div>
-        <small>Tempelkan gambar QR kalian di kotak ini (opsional).</small>
+        <div class="map-card">
+          <header>KJRI Jeddah</header>
+          <div class="actions">
+            <button class="btn small" id="openMaps">Buka Maps</button>
+            <button class="btn small" id="copyAddr">Copy Alamat</button>
+          </div>
+          <iframe id="mapFrame" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+        <small>Jika peta tidak tampil, tombol "Buka Maps" tetap berfungsi.</small>
       </div>
       <div class="card">
         <h3>RSVP</h3>
@@ -187,16 +194,17 @@
   </footer>
 
   <script>
-    // ====== CONFIGURASI DASAR ======
+    // ====== CONFIG ======
     const EVENT_ISO = '2025-11-20T11:00:00+03:00'; // Jeddah (UTC+3)
-    const MAPS_URL = 'https://maps.google.com/?q=KJRI%20Jeddah'; // ganti jika perlu
+    const MAPS_Q = 'KJRI Jeddah';
+    const MAPS_URL = 'https://maps.google.com/?q=' + encodeURIComponent(MAPS_Q);
 
     // ====== ADD TO CALENDAR (.ics) ======
     function buildICS(){
       const dt = new Date(EVENT_ISO);
       const start = dt.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z/,'Z');
       const end = new Date(dt.getTime()+60*60*1000).toISOString().replace(/[-:]/g,'').replace(/\.\d{3}Z/,'Z');
-      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Undangan Karina & Alvin//ID\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nDTSTART:${start}\nDTEND:${end}\nSUMMARY:Akad Nikah — Karina & Alvin\nLOCATION:KJRI Jeddah\nDESCRIPTION:Akad Nikah Karina & Alvin (pukul 11:00 waktu Jeddah)\nEND:VEVENT\nEND:VCALENDAR`;
+      const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Undangan Karina & Alvin//ID\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nBEGIN:VEVENT\nDTSTART:${start}\nDTEND:${end}\nSUMMARY:Akad Nikah — Karina & Alvin\nLOCATION:${MAPS_Q}\nDESCRIPTION:Akad Nikah Karina & Alvin (pukul 11:00 waktu Jeddah)\nEND:VEVENT\nEND:VCALENDAR`;
       const blob = new Blob([ics], {type:'text/calendar'});
       return URL.createObjectURL(blob);
     }
@@ -210,8 +218,14 @@
       setTimeout(()=>URL.revokeObjectURL(url), 1500);
     });
 
-    // Maps link
+    // ====== MAPS ======
     document.getElementById('mapsLink').setAttribute('href', MAPS_URL);
+    document.getElementById('openMaps').addEventListener('click', ()=> window.open(MAPS_URL, '_blank'));
+    document.getElementById('copyAddr').addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(MAPS_Q); alert('Alamat tersalin: '+MAPS_Q); }catch{ alert('Gagal menyalin alamat'); }
+    });
+    const mapFrame = document.getElementById('mapFrame');
+    mapFrame.src = 'https://www.google.com/maps?q=' + encodeURIComponent(MAPS_Q) + '&output=embed';
 
     // ====== COUNTDOWN ======
     const dEl=document.getElementById('d'), hEl=document.getElementById('h'), mEl=document.getElementById('m'), sEl=document.getElementById('s');
@@ -231,12 +245,10 @@
     tick(); setInterval(tick, 1000);
 
     // ====== REVEAL ON SCROLL ======
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); })
-    }, {threshold:.14});
+    const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('on'); }) }, {threshold:.14});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-    // ====== CAROUSEL (pixel-based, swipe smooth) ======
+    // ====== CAROUSEL (pixel-based, swipe smooth + flick) ======
     const track = document.getElementById('track');
     const viewport = document.getElementById('carousel');
     const prev = document.getElementById('prev');
@@ -251,56 +263,101 @@
       track.style.transition = animate ? 'transform .45s cubic-bezier(.22,.61,.36,1)' : 'none';
       track.style.transform = `translate3d(${x}px,0,0)`;
     }
-
-    function go(i){
-      const n = slideCount();
-      index = (i+n)%n;
-      applyPx(0,true);
-    }
-
+    function go(i){ const n = slideCount(); index = (i+n)%n; applyPx(0,true); }
     prev?.addEventListener('click',()=>go(index-1));
     next?.addEventListener('click',()=>go(index+1));
 
-    // drag / swipe
-    let startX=0, dx=0, dragging=false, pid=null;
-    track.addEventListener('pointerdown',e=>{
-      dragging=true; startX=e.clientX; dx=0; pid=e.pointerId; track.setPointerCapture?.(pid); applyPx(0,false);
-    });
+    // drag / swipe + flick velocity
+    let startX=0, dx=0, dragging=false, pid=null, t0=0;
+    track.addEventListener('pointerdown',e=>{ dragging=true; startX=e.clientX; dx=0; pid=e.pointerId; t0=performance.now(); track.setPointerCapture?.(pid); applyPx(0,false); });
     track.addEventListener('pointermove',e=>{ if(!dragging) return; dx=e.clientX-startX; applyPx(dx,false); });
-    function endDrag(){ if(!dragging) return; dragging=false; const w=viewport.clientWidth; const fraction = Math.abs(dx)/w; if(fraction>0.12){ go(index + (dx<0?1:-1)); } else { applyPx(0,true); } dx=0; pid=null; }
+    function endDrag(){
+      if(!dragging) return; dragging=false; const w=viewport.clientWidth; const dt=(performance.now()-t0)||1; const v=dx/dt; // px per ms
+      const flick = Math.abs(v)>0.5; // cepat
+      const far = Math.abs(dx)/w>0.12; // jauh
+      if(flick || far){ go(index + (dx<0?1:-1)); } else { applyPx(0,true); }
+      dx=0; pid=null; }
     track.addEventListener('pointerup', endDrag);
     track.addEventListener('pointercancel', endDrag);
     track.addEventListener('pointerleave', ()=>{ if(dragging) endDrag(); });
-
     window.addEventListener('resize', ()=>applyPx(0,false));
     applyPx(0,false);
 
-    // ====== FALLING BLUE FLOWERS (always-on, adaptive) ======
-    const flowers = document.getElementById('flowers');
+    // ====== CANVAS PETALS (blue flowers) ======
+    const canvas = document.getElementById('petalsCanvas');
+    const hero = document.getElementById('hero');
+    const ctx = canvas.getContext('2d');
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function makeFlower(){
-      const el = document.createElement('span');
-      el.className='flower';
-      el.textContent='✿';
-      const x = Math.random()*100;           // vw
-      const drift = (Math.random()*24 - 12) + 'vw';
-      const dur = (reduce? 18: 12) + Math.random()*8;   // lebih lama jika reduce
-      const delay = Math.random()*6;
-      el.style.setProperty('--x', x+'vw');
-      el.style.setProperty('--drift', drift);
-      el.style.setProperty('--dur', dur);
-      el.style.setProperty('--delay', delay);
-      flowers.appendChild(el);
-      // bersihkan setelah beberapa siklus
-      setTimeout(()=>{ el.remove(); }, (dur+delay)*1000*2);
-    }
-    // batch awal
-    const initial = reduce? 8 : 16;
-    for(let i=0;i<initial;i++) makeFlower();
-    // spawn berkala
-    setInterval(()=>{ if(document.visibilityState==='visible') makeFlower(); }, reduce? 2600 : 1600);
+    let W=0,H=0,DPR= Math.min(2, window.devicePixelRatio || 1);
 
-    // ====== If event is over ======
+    function resizeCanvas(){
+      W = hero.clientWidth; H = hero.clientHeight;
+      canvas.width = Math.max(1, Math.floor(W*DPR));
+      canvas.height = Math.max(1, Math.floor(H*DPR));
+      canvas.style.width = W+'px'; canvas.style.height = H+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function rand(a,b){ return a + Math.random()*(b-a); }
+
+    const COUNT = reduce? 12 : 28;
+    const petals = Array.from({length:COUNT}, ()=>spawn());
+
+    function spawn(){
+      return {
+        x: rand(0, W),
+        y: rand(-H, 0),
+        r: rand(8, 18),        // size
+        vy: rand(25, 55),      // vertical speed px/s
+        vx: rand(-10, 10),     // horizontal drift px/s
+        rot: rand(0, Math.PI*2),
+        vr: rand(-0.8, 0.8),   // rotation speed rad/s
+        sway: rand(0.8, 1.6),  // sway amplitude factor
+        hue: rand(205, 215)    // blue-ish
+      };
+    }
+
+    let last=performance.now();
+    function drawFlower(x,y,r,rot,hue){
+      ctx.save();
+      ctx.translate(x,y); ctx.rotate(rot);
+      const petalCount = 5;
+      for(let i=0;i<petalCount;i++){
+        ctx.rotate((Math.PI*2)/petalCount);
+        ctx.beginPath();
+        // ellipse petal
+        ctx.ellipse(0, r*0.55, r*0.38, r*0.22, 0, 0, Math.PI*2);
+        const grad = ctx.createRadialGradient(0, r*0.55, r*0.05, 0, r*0.55, r*0.45);
+        grad.addColorStop(0, `hsla(${hue}, 60%, 92%, .95)`);
+        grad.addColorStop(1, `hsla(${hue}, 55%, 60%, .85)`);
+        ctx.fillStyle = grad; ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = 0.8; ctx.stroke();
+      }
+      // center
+      ctx.beginPath(); ctx.arc(0,0,r*0.22,0,Math.PI*2);
+      ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fill();
+      ctx.restore();
+    }
+
+    function loop(t){
+      const dt = Math.min(0.05, (t-last)/1000); last=t; // clamp dt
+      ctx.clearRect(0,0,W,H);
+      for(const p of petals){
+        p.y += p.vy*dt;
+        p.x += (p.vx + Math.sin((t*0.001)+p.y*0.02)*12*p.sway)*dt;
+        p.rot += p.vr*dt;
+        drawFlower(p.x, p.y, p.r, p.rot, p.hue);
+        if(p.y - p.r > H + 10){ // recycle
+          const np = spawn(); np.y = -np.r; p.x=np.x; p.y=np.y; p.r=np.r; p.vy=np.vy; p.vx=np.vx; p.rot=np.rot; p.vr=np.vr; p.sway=np.sway; p.hue=np.hue;
+        }
+      }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+
+    // ====== Event done ======
     (function(){
       const target = new Date(EVENT_ISO);
       if(Date.now() > +target){
