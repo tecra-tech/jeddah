@@ -746,7 +746,6 @@ END:VCALENDAR`;
   const sec = document.getElementById('hitung-mundur');
   if(!sec) return;
 
-  // bikin layer kalau belum ada
   let layer = document.getElementById('arabesqueLayer');
   if(!layer){
     layer = document.createElement('div');
@@ -754,80 +753,62 @@ END:VCALENDAR`;
     sec.prepend(layer);
   }
 
-  // gambar 1 tile pattern ke canvas, lalu jadiin background-image
   const DPR = Math.min(2, window.devicePixelRatio||1);
 
+  // —— set kecil & soft ——
+  const TILE_MIN = 48;        // ukuran terkecil 1 tile (px)
+  const TILE_MAX = 96;        // ukuran terbesar 1 tile (px)
+  const TILES_PER_WIDTH = 14; // makin besar => motif makin kecil & rapat
+
   function drawTile(size){
-    const s = Math.max(60, size|0);                // ukuran tile px
+    const s = Math.max(40, size|0);
     const c = document.createElement('canvas');
-    c.width = s * DPR; c.height = s * DPR;
+    c.width = s*DPR; c.height = s*DPR;
     const ctx = c.getContext('2d');
     ctx.setTransform(DPR,0,0,DPR,0,0);
     ctx.clearRect(0,0,s,s);
 
-    // palet
-    const lineMain = 'rgba(45,74,106,.60)';        // biru elegan
-    const lineHi   = 'rgba(255,255,255,.85)';      // putih kontras
-    const lineSoft = 'rgba(184,197,214,.55)';      // abu soft
+    // palet diperlunak
+    const lineMain = 'rgba(45,74,106,.48)';   // biru elegan (lebih soft)
+    const lineHi   = 'rgba(255,255,255,.75)'; // putih kontras tapi lembut
+    const lineSoft = 'rgba(184,197,214,.45)'; // abu
 
     ctx.lineCap='round'; ctx.lineJoin='round';
 
     const cx=s/2, cy=s/2;
+    function poly(n,r,rot){const pts=[];for(let i=0;i<n;i++){const a=rot+i*2*Math.PI/n;pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}return pts;}
+    function path(pts){ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i][0],pts[i][1]);ctx.closePath();}
+    function line(x1,y1,x2,y2,w,col){ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.lineWidth=w;ctx.strokeStyle=col;ctx.stroke();}
 
-    function poly(n, r, rot){
-      const pts=[];
-      for(let i=0;i<n;i++){
-        const a = rot + i*2*Math.PI/n;
-        pts.push([cx + Math.cos(a)*r, cy + Math.sin(a)*r]);
-      }
-      return pts;
-    }
-    function path(pts){ ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-      for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.closePath(); }
-
-    function line(x1,y1,x2,y2, w, col){
-      ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
-      ctx.lineWidth=w; ctx.strokeStyle=col; ctx.stroke();
-    }
-
-    // — star (dua bujur sangkar berputar) + inner star
-    const r1 = s*0.34, r2 = s*0.17;
-    // highlight putih
-    ctx.lineWidth=1.3; ctx.strokeStyle=lineHi;
+    const r1=s*0.34, r2=s*0.17;
+    // highlight
+    ctx.lineWidth=1.1; ctx.strokeStyle=lineHi;
     path(poly(4,r1,0)); ctx.stroke(); path(poly(4,r1,Math.PI/4)); ctx.stroke();
     path(poly(4,r2,0)); ctx.stroke(); path(poly(4,r2,Math.PI/4)); ctx.stroke();
 
-    // garis utama
-    ctx.lineWidth=.9; ctx.strokeStyle=lineMain;
+    // utama
+    ctx.lineWidth=.85; ctx.strokeStyle=lineMain;
     path(poly(4,r1,0)); ctx.stroke(); path(poly(4,r1,Math.PI/4)); ctx.stroke();
     ctx.strokeStyle=lineSoft;
     path(poly(4,r2,0)); ctx.stroke(); path(poly(4,r2,Math.PI/4)); ctx.stroke();
 
-    // — rays ke tepi (biar sambung antar tile)
-    const m = s/2;
-    const rays = [
-      [m,0], [s,m], [m,s], [0,m],      // tengah sisi
-      [0,0], [s,0], [s,s], [0,s]       // ke empat sudut
-    ];
-    // highlight
-    for(const [x,y] of rays) line(cx,cy,x,y,1.2,lineHi);
-    // garis utama
-    for(const [x,y] of rays) line(cx,cy,x,y,.9,lineMain);
+    // rays biar seamless
+    const m=s/2, rays=[[m,0],[s,m],[m,s],[0,m],[0,0],[s,0],[s,s],[0,s]];
+    for(const [x,y] of rays) line(cx,cy,x,y,1.0,lineHi);
+    for(const [x,y] of rays) line(cx,cy,x,y,.8,lineMain);
 
-    // titik kecil di pusat
-    ctx.fillStyle='rgba(45,74,106,.18)';
-    ctx.beginPath(); ctx.arc(cx,cy,1.1,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(45,74,106,.14)';
+    ctx.beginPath(); ctx.arc(cx,cy,1,0,Math.PI*2); ctx.fill();
 
     return c.toDataURL();
   }
 
   function applyTexture(){
-    // skala tile responsif: kira2 7–10 tile sepanjang lebar
     const base = sec.clientWidth || 960;
-    const size = Math.max(90, Math.min(140, Math.round(base / 8)));
-    const url = drawTile(size);
+    // dulu /8; sekarang /14 supaya tile lebih kecil & rapat
+    const size = Math.max(TILE_MIN, Math.min(TILE_MAX, Math.round(base / TILES_PER_WIDTH)));
     layer.style.setProperty('--arab-size', size+'px');
-    layer.style.backgroundImage = `url(${url})`;
+    layer.style.backgroundImage  = `url(${drawTile(size)})`;
     layer.style.backgroundRepeat = 'repeat';
     layer.style.backgroundPosition = 'center top';
   }
@@ -835,18 +816,16 @@ END:VCALENDAR`;
   applyTexture();
   window.addEventListener('resize', applyTexture, {passive:true});
 
-  // bonus: fade-in/out halus saat section masuk/keluar viewport
+  // fade in/out saat muncul di viewport (tetap ada vertical fade via CSS mask)
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(en=>{
-      const r = en.intersectionRatio;                 // 0..1
-      const op = 0.12 + 0.88*r;                       // lebih hidup saat fully visible
-      layer.style.opacity = op.toFixed(2);
+      const r=en.intersectionRatio;
+      layer.style.opacity = (0.10 + 0.85*r).toFixed(2); // sedikit lebih soft
       layer.style.transform = `translateY(${(1-r)*10}px)`;
     });
-  }, {threshold:[0, .1,.25,.5,.75, 1]});
+  }, {threshold:[0,.1,.25,.5,.75,1]});
   io.observe(sec);
 })();
-
 
     // ====== Event done note ======
     (function(){
@@ -860,4 +839,3 @@ END:VCALENDAR`;
   </script>
 </body>
 </html>
-
