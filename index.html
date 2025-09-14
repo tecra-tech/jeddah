@@ -9,13 +9,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root{
-      --dove:#2d4a6a; --dove-weak:#8aa0b8; --ink:#0f172a; --paper:#ffffff; --muted:#eef2f7; --ring: rgba(45,74,106,.22);
-    }
+    :root{ --dove:#2d4a6a; --dove-weak:#8aa0b8; --ink:#0f172a; --paper:#ffffff; --muted:#eef2f7; --ring: rgba(45,74,106,.22); }
     html{scroll-behavior:smooth}
     *{box-sizing:border-box}
     html,body{height:100%}
-    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:var(--paper);}    
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:var(--paper);}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
 
@@ -82,7 +80,7 @@
     .btn.small{padding:8px 12px;border-radius:10px;font-weight:600;border:1px solid #dbe4ef;background:#fff;color:var(--dove);box-shadow:0 8px 16px rgba(0,0,0,.08);}
     .map-card iframe{width:100%;height:100%;aspect-ratio:16/9;border:0;filter:saturate(1.05) contrast(1.05);}
 
-    /* --- LAYOUT: Lokasi & RSVP --- */
+    /* --- LAYOUT: Lokasi & WISHES --- */
     .row{display:grid;grid-template-columns:1fr;gap:32px;}
     @media (min-width:760px){.row{grid-template-columns:1.2fr .8fr;gap:28px;}}
 
@@ -110,37 +108,81 @@
     #petalsCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;}
 
     /* ——— WISHES (biru elegan) ——— */
-.wish-form{display:grid;gap:10px;margin:8px 0 14px}
-.wish-form input,.wish-form textarea{
-  width:100%; padding:12px 14px; border:1px solid #dbe4ef; border-radius:12px;
-  background:#f7faff; color:#1f3550; outline:none;
-}
-.wish-form textarea{min-height:92px; resize:vertical}
-.wish-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.wish-actions .btn{box-shadow:0 10px 24px var(--ring)}
-.wish-hint{color:#51657e}
+    .wish-form{display:grid;gap:10px;margin:8px 0 14px}
+    .wish-form input,.wish-form textarea{
+      width:100%; padding:12px 14px; border:1px solid #dbe4ef; border-radius:12px;
+      background:#f7faff; color:#1f3550; outline:none;
+    }
+    .wish-form textarea{min-height:92px; resize:vertical}
+    .wish-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .wish-actions .btn{box-shadow:0 10px 24px var(--ring)}
+    .wish-hint{color:#51657e}
 
-.wish-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+    .wish-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+    .wish-item{
+      display:grid; grid-template-columns:auto 1fr; gap:10px;
+      background:linear-gradient(180deg,#f8fbff,#edf4ff);
+      border:1px solid #d8e6fb; border-radius:14px; padding:12px 14px;
+      box-shadow:0 8px 18px var(--ring);
+    }
+    .wish-avatar{
+      width:36px;height:36px;border-radius:50%;
+      display:grid;place-items:center;font-weight:700;
+      color:#2d4a6a;background:#e7f0ff;border:1px solid #cfe0ff;
+    }
+    .wish-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .wish-name{font-weight:700;color:#29486b}
+    .wish-time{font-size:12px;color:#6b7f96}
+    .wish-msg{white-space:pre-wrap;color:#2b3f58;margin-top:4px}
+    .wish-empty{color:#57708f;padding:6px 0}
+
+    /* ===== Wishes: area scroll mandiri ===== */
+    .wish-scroll{
+      margin-top:10px;
+      max-height:360px;          /* tampil 3 kartu kira-kira */
+      overflow:auto;
+      padding-right:6px;
+      overscroll-behavior:contain;
+      -webkit-overflow-scrolling:touch;
+    }
+    .wish-scroll::-webkit-scrollbar{ width:8px; }
+    .wish-scroll::-webkit-scrollbar-thumb{ background:rgba(45,74,106,.25); border-radius:999px; }
+    .wish-scroll::-webkit-scrollbar-track{ background:transparent; }
+
+/* ===== FIX panjang pesan pada Wishes ===== */
 .wish-item{
-  display:grid; grid-template-columns:auto 1fr; gap:10px;
-  background:linear-gradient(180deg,#f8fbff,#edf4ff);
-  border:1px solid #d8e6fb; border-radius:14px; padding:12px 14px;
-  box-shadow:0 8px 18px var(--ring);
+  grid-template-columns: 44px 1fr;   /* avatar tetap, konten fleksibel */
+  align-items: flex-start;
 }
+
 .wish-avatar{
-  width:36px;height:36px;border-radius:50%;
-  display:grid;place-items:center;font-weight:700;
-  color:#2d4a6a;background:#e7f0ff;border:1px solid #cfe0ff;
+  width:44px; height:44px;           /* konsisten dengan grid di atas */
 }
-.wish-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.wish-name{font-weight:700;color:#29486b}
-.wish-time{font-size:12px;color:#6b7f96}
-.wish-msg{white-space:pre-wrap;color:#2b3f58;margin-top:4px}
-.wish-empty{color:#57708f;padding:6px 0}
+
+/* kolom konten (yang berisi meta + pesan) harus boleh mengecil */
+.wish-item > div:last-child{
+  min-width: 0;
+}
+
+/* bungkus kata super panjang + emoji agar tidak melebar */
+.wish-msg{
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;           /* utama */
+  word-break: break-word;            /* fallback Safari lama */
+  hyphens: auto;                     /* kalau browser dukung */
+}
+
+/* antisipasi nama yang kelewat panjang */
+.wish-name{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+  
 
 
-
-  </style>
+</style>
 </head>
 <body>
   <!-- HERO -->
@@ -150,7 +192,7 @@
       <div class="badge">KABAR PERNIKAHAN</div>
       <div class="basmalah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
       <p style="margin:15px 0 0;opacity:.9">اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
-      <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami mewakili keluarga besar ingin mengabarkan acara pernikahan kami yang diselenggarakan secara sederhana dan terbatas.</p>
+      <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami mewakili keluarga besar ingin mengabarkan acara pernikahan kami yang diselenggarakan secara sederhana.</p>
       <h1 class="names">Karina &amp; Alvin</h1>
       <div class="meta">Kamis, 20 November 2025</div>
       <div class="meta">KJRI Jeddah</div>
@@ -188,14 +230,12 @@
 
       <div class="card">
         <h3>Mempelai</h3>
-        <!-- VIDEO diletakkan DI BAWAH judul, DI ATAS card Karina -->
         <div class="media">
           <video src="video/mempelai.mp4" poster="image/mempelai-poster.jpg"
                  autoplay muted loop playsinline
                  onerror="this.outerHTML='<div style=&quot;padding:18px;text-align:center;color:#64748b&quot;>Video mempelai belum tersedia</div>'">
           </video>
         </div>
-
         <div class="pair">
           <div class="person">
             <div class="name">Karina Dewi Oktaviani</div>
@@ -237,23 +277,26 @@
         </div>
       </div>
 
-  <div class="card">
-    <h3>Wishes</h3>
-    <form id="wishForm" class="wish-form">
-      <input id="wName" type="text" name="name" placeholder="Nama" required />
-      <textarea id="wMsg" name="message" placeholder="Tulis ucapan & doa..." required></textarea>
-      <div class="wish-actions">
-        <button class="btn primary" id="wishSend" type="submit">Kirim</button>
-        <span class="wish-hint" id="wishStatus"></span>
+      <div class="card">
+        <h3>Wishes</h3>
+        <form id="wishForm" class="wish-form">
+          <input id="wName" type="text" name="name" placeholder="Nama" required />
+          <textarea id="wMsg" name="message" placeholder="Tulis ucapan & doa..." required></textarea>
+          <div class="wish-actions">
+            <button class="btn primary" id="wishSend" type="submit">Kirim</button>
+            <span class="wish-hint" id="wishStatus"></span>
+          </div>
+        </form>
+
+        <!-- area list dengan scroll sendiri -->
+        <div class="wish-scroll">
+          <ul class="wish-list" id="wishList">
+            <li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>
+          </ul>
+        </div>
       </div>
-    </form>
-
-    <ul class="wish-list" id="wishList">
-      <li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>
-    </ul>
-  </div>
+    </div>
   </section>
-
 
   <footer>
     <div class="section" style="padding-top:0">
@@ -465,138 +508,118 @@ END:VCALENDAR`;
       ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,passive:true,capture:true}));
     })();
 
-/* ====== WISHES (Google Sheets) ====== */
-const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxzEAu2bV6sYEPJqbSBLshXubUi1MgHHy5DACp_l2wYlzW2wr9MEgouITUfQX_eWHXo/exec'; // contoh: https://script.google.com/macros/s/AKfycb.../exec
-const wishForm = document.getElementById('wishForm');
-const wName    = document.getElementById('wName');
-const wMsg     = document.getElementById('wMsg');
-const wStatus  = document.getElementById('wishStatus');
-const wishList = document.getElementById('wishList');
+    /* ====== WISHES (Google Sheets) ====== */
+    const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxzEAu2bV6sYEPJqbSBLshXubUi1MgHHy5DACp_l2wYlzW2wr9MEgouITUfQX_eWHXo/exec';
+    const wishForm = document.getElementById('wishForm');
+    const wName    = document.getElementById('wName');
+    const wMsg     = document.getElementById('wMsg');
+    const wStatus  = document.getElementById('wishStatus');
+    const wishList = document.getElementById('wishList');
+    const wishScroll = document.querySelector('.wish-scroll'); // <- pembungkus scroll
 
-let ALL_WISHES = []; // cache lokal
+    let ALL_WISHES = []; // cache lokal
 
-// util
-const esc = s => String(s ?? '').replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const initial = s => (s||'?').trim().charAt(0).toUpperCase();
-const parseTS = (s) => {
-  if (!s) return new Date();
-  // dukung format 14/09/2025 9:33 dari Sheets
-  const m = String(s).match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*(\d{1,2})?:?(\d{2})?/);
-  if (m) {
-    const [_, d, mo, y, hh='0', mm='0'] = m;
-    return new Date(Number(y.length===2?('20'+y):y), Number(mo)-1, Number(d), Number(hh), Number(mm));
-  }
-  const t = Date.parse(s);
-  return isNaN(t) ? new Date() : new Date(t);
-};
-const timeAgo = (isoLike) => {
-  const d = Math.max(1, Math.floor((Date.now() - parseTS(isoLike).getTime())/1000));
-  if (d < 60) return `${d} dtk lalu`;
-  const m = Math.floor(d/60); if (m < 60) return `${m} mnt lalu`;
-  const h = Math.floor(m/60); if (h < 24) return `${h} jam lalu`;
-  const a = Math.floor(h/24); return `${a} hari lalu`;
-};
+    // util
+    const esc = s => String(s ?? '').replace(/[&<>\"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+    const initial = s => (s||'?').trim().charAt(0).toUpperCase();
+    const parseTS = (s) => {
+      if (!s) return new Date();
+      const m = String(s).match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*(\d{1,2})?:?(\d{2})?/);
+      if (m) { const [_, d, mo, y, hh='0', mm='0'] = m; return new Date(Number(y.length===2?('20'+y):y), Number(mo)-1, Number(d), Number(hh), Number(mm)); }
+      const t = Date.parse(s); return isNaN(t) ? new Date() : new Date(t);
+    };
+    const timeAgo = (isoLike) => {
+      const d = Math.max(1, Math.floor((Date.now() - parseTS(isoLike).getTime())/1000));
+      if (d < 60) return `${d} dtk lalu`;
+      const m = Math.floor(d/60); if (m < 60) return `${m} mnt lalu`;
+      const h = Math.floor(m/60); if (h < 24) return `${h} jam lalu`;
+      const a = Math.floor(h/24); return `${a} hari lalu`;
+    };
 
-function renderWishes(rows){
-  ALL_WISHES = rows;
-  wishList.innerHTML = '';
-  if(!rows || !rows.length){
-    wishList.innerHTML = '<li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>';
-    return;
-  }
-  for(const r of rows){
-    const li = document.createElement('li');
-    li.className = 'wish-item';
-    li.innerHTML = `
-      <div class="wish-avatar">${esc(initial(r.name))}</div>
-      <div>
-        <div class="wish-meta">
-          <span class="wish-name">${esc(r.name)}</span>
-          <span class="wish-time">${esc(timeAgo(r.timestamp))}</span>
-        </div>
-        <div class="wish-msg">${esc(r.message)}</div>
-      </div>`;
-    wishList.appendChild(li);
-  }
-}
+    function renderWishes(rows){
+      ALL_WISHES = rows;
+      wishList.innerHTML = '';
+      if(!rows || !rows.length){
+        wishList.innerHTML = '<li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>';
+        if (wishScroll) wishScroll.scrollTop = 0;
+        return;
+      }
+      for(const r of rows){
+        const li = document.createElement('li');
+        li.className = 'wish-item';
+        li.innerHTML = `
+          <div class="wish-avatar">${esc(initial(r.name))}</div>
+          <div>
+            <div class="wish-meta">
+              <span class="wish-name">${esc(r.name)}</span>
+              <span class="wish-time">${esc(timeAgo(r.timestamp))}</span>
+            </div>
+            <div class="wish-msg">${esc(r.message)}</div>
+          </div>`;
+        wishList.appendChild(li);
+      }
+      if (wishScroll) wishScroll.scrollTop = 0; // reset ke atas (terbaru dulu)
+    }
 
-// robust fetch JSON (fallback dari text -> JSON)
-async function fetchJSON(url, opts){
-  const res = await fetch(url, { cache:'no-store', ...opts });
-  const txt = await res.text();
-  try { return JSON.parse(txt); } catch { return txt; }
-}
+    async function fetchJSON(url, opts){
+      const res = await fetch(url, { cache:'no-store', ...opts });
+      const txt = await res.text();
+      try { return JSON.parse(txt); } catch { return txt; }
+    }
+    function normalizeRows(raw){
+      if (Array.isArray(raw)) return raw;
+      if (raw && raw.rows) return raw.rows;
+      if (raw && raw.ok && raw.rows) return raw.rows;
+      return [];
+    }
+    async function loadWishes(){
+      try{
+        const data = await fetchJSON(`${SHEETS_WEBAPP_URL}?limit=100&nocache=${Date.now()}`);
+        const rows = normalizeRows(data)
+          .map(r => ({ timestamp: r.timestamp ?? r.time ?? r[0], name: (r.name ?? r[1] ?? '').trim(), message: (r.message ?? r[2] ?? '').trim() }))
+          .filter(r => r.name && r.message);
+        renderWishes(rows);
+      }catch(e){ console.warn('loadWishes error', e); }
+    }
 
-function normalizeRows(raw){
-  // Terima beberapa bentuk: {ok,rows}, {rows}, Array<obj>, atau CSV array
-  if (Array.isArray(raw)) return raw;
-  if (raw && raw.rows) return raw.rows;
-  if (raw && raw.ok && raw.rows) return raw.rows;
-  // kalau yang dikirim string "ok" dsb., biarkan kosong
-  return [];
-}
+    let sending = false;
+    wishForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      if(sending) return;
+      const name = wName.value.trim(), message = wMsg.value.trim();
+      if(!name || !message){ wStatus.textContent = 'Nama & ucapan wajib diisi.'; return; }
 
-async function loadWishes(){
-  try{
-    const data = await fetchJSON(`${SHEETS_WEBAPP_URL}?limit=100&nocache=${Date.now()}`);
-    const rows = normalizeRows(data)
-      .map(r => ({
-        timestamp: r.timestamp ?? r.time ?? r[0],
-        name: (r.name ?? r[1] ?? '').trim(),
-        message: (r.message ?? r[2] ?? '').trim()
-      }))
-      .filter(r => r.name && r.message);
-    renderWishes(rows);
-  }catch(e){
-    // diamkan—UI akan menampilkan "Belum ada ucapan"
-    console.warn('loadWishes error', e);
-  }
-}
+      const last = +localStorage.getItem('w_last') || 0;
+      if(Date.now() - last < 10_000){ wStatus.textContent = 'Tunggu sebentar sebelum mengirim lagi 🙏'; return; }
 
-let sending = false;
-wishForm.addEventListener('submit', async (e)=>{
-  e.preventDefault();
-  if(sending) return;
-  const name = wName.value.trim(), message = wMsg.value.trim();
-  if(!name || !message){ wStatus.textContent = 'Nama & ucapan wajib diisi.'; return; }
-
-  // rate limit kecil
-  const last = +localStorage.getItem('w_last') || 0;
-  if(Date.now() - last < 10_000){ wStatus.textContent = 'Tunggu sebentar sebelum mengirim lagi 🙏'; return; }
-
-  sending = true;
-  wStatus.textContent = 'Mengirim...';
-  try{
-    const resp = await fetchJSON(SHEETS_WEBAPP_URL, {
-      method:'POST',
-      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
-      body: JSON.stringify({ name, message })
+      sending = true;
+      wStatus.textContent = 'Mengirim...';
+      try{
+        const resp = await fetchJSON(SHEETS_WEBAPP_URL, {
+          method:'POST',
+          headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+          body: JSON.stringify({ name, message })
+        });
+        const ok = (resp && resp.ok === true) || (typeof resp === 'string' && /ok/i.test(resp));
+        if(ok){
+          wMsg.value = '';
+          wStatus.textContent = 'Terkirim. Terima kasih! 💙';
+          localStorage.setItem('w_last', String(Date.now()));
+          renderWishes([{ timestamp:new Date().toISOString(), name, message }, ...ALL_WISHES]);
+          loadWishes();
+        }else{
+          wStatus.textContent = 'Gagal mengirim. Coba lagi.';
+        }
+      }catch(err){
+        console.warn(err);
+        wStatus.textContent = 'Gagal mengirim (koneksi?).';
+      }finally{
+        sending = false;
+        setTimeout(()=> wStatus.textContent = '', 3500);
+      }
     });
 
-    // anggap sukses jika {ok:true} ATAU string mengandung "ok"
-    const ok = (resp && resp.ok === true) || (typeof resp === 'string' && /ok/i.test(resp));
-    if(ok){
-      wMsg.value = '';
-      wStatus.textContent = 'Terkirim. Terima kasih! 💙';
-      localStorage.setItem('w_last', String(Date.now()));
-      // prepend sementara
-      renderWishes([{ timestamp:new Date().toISOString(), name, message }, ...ALL_WISHES]);
-      // sync server
-      loadWishes();
-    }else{
-      wStatus.textContent = 'Gagal mengirim. Coba lagi.';
-    }
-  }catch(err){
-    console.warn(err);
-    wStatus.textContent = 'Gagal mengirim (koneksi?).';
-  }finally{
-    sending = false;
-    setTimeout(()=> wStatus.textContent = '', 3500);
-  }
-});
-
-loadWishes();
-
+    loadWishes();
 
     // ====== Event done note ======
     (function(){
