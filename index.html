@@ -15,7 +15,7 @@
     html,body{height:100%}
     body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial;color:var(--ink);background:var(--paper);}
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;display:block}
+    img,video{max-width:100%;display:block}
 
     /* --- HERO --- */
     .hero{position:relative;isolation:isolate;color:#fff;overflow:hidden;
@@ -58,10 +58,7 @@
     .person .parents{color:#435568;font-size:14px;margin-top:2px}
 
     /* media (img/video) di dalam card */
-    .card .media{
-      margin:0 0 14px;border:1px solid #dbe4ef;border-radius:14px;overflow:hidden;
-      box-shadow:0 8px 18px var(--ring);aspect-ratio:16/9;background:#f4f7fb;
-    }
+    .card .media{ margin:0 0 14px;border:1px solid #dbe4ef;border-radius:14px;overflow:hidden;box-shadow:0 8px 18px var(--ring);aspect-ratio:16/9;background:#f4f7fb; }
     .card .media img,.card .media video{width:100%;height:100%;object-fit:cover;display:block}
 
     /* --- GALERI (FADE, STORY STYLE) --- */
@@ -97,7 +94,7 @@
     @media (max-width:380px){.audio-pill{padding-right:8px}.audio-pill .meta{min-width:140px;max-width:160px}}
 
     /* --- FOOTER --- */
-    footer{background:linear-gradient(180deg,#f3f7fb,#e7eef7);padding:36px 20px;margin-top:20px;border-top:1px solid #d5e1ef}
+    footer{background:linear-gradient(180deg,#f3f7fb,#e7eef7);padding:36px 20px;margin-top:0;border-top:1px solid #d5e1ef}
     .quote{max-width:900px;margin:10px auto 0;border-left:3px solid var(--dove-weak);padding:10px 14px;background:#f8fbff;border-radius:10px}
 
     /* --- Reveal --- */
@@ -109,80 +106,86 @@
 
     /* ——— WISHES (biru elegan) ——— */
     .wish-form{display:grid;gap:10px;margin:8px 0 14px}
-    .wish-form input,.wish-form textarea{
-      width:100%; padding:12px 14px; border:1px solid #dbe4ef; border-radius:12px;
-      background:#f7faff; color:#1f3550; outline:none;
-    }
+    .wish-form input,.wish-form textarea{width:100%; padding:12px 14px; border:1px solid #dbe4ef; border-radius:12px; background:#f7faff; color:#1f3550; outline:none;}
     .wish-form textarea{min-height:92px; resize:vertical}
     .wish-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .wish-actions .btn{box-shadow:0 10px 24px var(--ring)}
     .wish-hint{color:#51657e}
-
     .wish-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
-    .wish-item{
-      display:grid; grid-template-columns:auto 1fr; gap:10px;
-      background:linear-gradient(180deg,#f8fbff,#edf4ff);
-      border:1px solid #d8e6fb; border-radius:14px; padding:12px 14px;
-      box-shadow:0 8px 18px var(--ring);
-    }
-    .wish-avatar{
-      width:36px;height:36px;border-radius:50%;
-      display:grid;place-items:center;font-weight:700;
-      color:#2d4a6a;background:#e7f0ff;border:1px solid #cfe0ff;
-    }
+    .wish-item{display:grid; grid-template-columns:44px 1fr; gap:10px; align-items:flex-start;
+      background:linear-gradient(180deg,#f8fbff,#edf4ff); border:1px solid #d8e6fb; border-radius:14px; padding:12px 14px; box-shadow:0 8px 18px var(--ring);}
+    .wish-avatar{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;color:#2d4a6a;background:#e7f0ff;border:1px solid #cfe0ff;}
+    .wish-item>div:last-child{min-width:0}
     .wish-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-    .wish-name{font-weight:700;color:#29486b}
+    .wish-name{font-weight:700;color:#29486b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
     .wish-time{font-size:12px;color:#6b7f96}
-    .wish-msg{white-space:pre-wrap;color:#2b3f58;margin-top:4px}
+    .wish-msg{white-space:pre-wrap;color:#2b3f58;margin-top:4px;overflow-wrap:anywhere;word-break:break-word;hyphens:auto}
     .wish-empty{color:#57708f;padding:6px 0}
-
-    /* ===== Wishes: area scroll mandiri ===== */
-    .wish-scroll{
-      margin-top:10px;
-      max-height:360px;          /* tampil 3 kartu kira-kira */
-      overflow:auto;
-      padding-right:6px;
-      overscroll-behavior:contain;
-      -webkit-overflow-scrolling:touch;
-    }
+    /* area list dengan scroll mandiri */
+    .wish-scroll{margin-top:10px;max-height:360px;overflow:auto;padding-right:6px;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
     .wish-scroll::-webkit-scrollbar{ width:8px; }
     .wish-scroll::-webkit-scrollbar-thumb{ background:rgba(45,74,106,.25); border-radius:999px; }
     .wish-scroll::-webkit-scrollbar-track{ background:transparent; }
 
-/* ===== FIX panjang pesan pada Wishes ===== */
-.wish-item{
-  grid-template-columns: 44px 1fr;   /* avatar tetap, konten fleksibel */
-  align-items: flex-start;
-}
+    /* ===== Closing "Surat Cinta" ===== */
+    .closing{padding:0}
+    .closing-wrap{
+      position:relative;
+      padding:64px 20px;
+      background:
+        radial-gradient(900px 400px at 15% 0%, rgba(45,74,106,.14), transparent 60%),
+        radial-gradient(900px 400px at 85% 100%, rgba(45,74,106,.12), transparent 60%),
+        linear-gradient(180deg,#eef5ff 0%,#e6eef9 100%);
+      border-top:1px solid #d6e2f3;
+    }
+    .closing-wrap::before,
+    .closing-wrap::after{
+      content:"";
+      position:absolute; left:0; right:0; height:60px;
+      background:linear-gradient(180deg, rgba(45,74,106,.12), transparent);
+      -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="white" d="M0,160L60,181.3C120,203,240,245,360,250.7C480,256,600,224,720,213.3C840,203,960,213,1080,197.3C1200,181,1320,139,1380,117.3L1440,96L1440,0L0,0Z"/></svg>') center/100% 100% no-repeat;
+              mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="white" d="M0,160L60,181.3C120,203,240,245,360,250.7C480,256,600,224,720,213.3C840,203,960,213,1080,197.3C1200,181,1320,139,1380,117.3L1440,96L1440,0L0,0Z"/></svg>') center/100% 100% no-repeat;
+      pointer-events:none;
+    }
+    .closing-wrap::before{top:-30px;opacity:.4;transform:scaleX(-1)}
+    .closing-wrap::after{bottom:-30px;opacity:.35}
 
-.wish-avatar{
-  width:44px; height:44px;           /* konsisten dengan grid di atas */
-}
-
-/* kolom konten (yang berisi meta + pesan) harus boleh mengecil */
-.wish-item > div:last-child{
-  min-width: 0;
-}
-
-/* bungkus kata super panjang + emoji agar tidak melebar */
-.wish-msg{
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;           /* utama */
-  word-break: break-word;            /* fallback Safari lama */
-  hyphens: auto;                     /* kalau browser dukung */
-}
-
-/* antisipasi nama yang kelewat panjang */
-.wish-name{
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
-}
-  
-
-
-</style>
+    .closing-card{
+      max-width:900px; margin:0 auto;
+      background:#ffffff;
+      border:1px solid #dbe4ef; border-radius:24px;
+      box-shadow:0 22px 50px rgba(45,74,106,.18), 0 4px 0 #eaf1fa inset;
+      padding:28px 22px; text-align:center;
+    }
+    .closing-title{
+      font-family:'Playfair Display',serif;
+      color:var(--dove);
+      font-weight:700; font-size:clamp(20px,3.2vw,28px);
+      margin:4px 0 8px;
+    }
+    .closing-lead{
+      color:#3a516b; line-height:1.75; margin:10px auto; max-width:720px;
+    }
+    .flourish{
+      margin:18px auto; width:min(360px,80%); opacity:.75;
+      filter:drop-shadow(0 2px 0 rgba(45,74,106,.05));
+    }
+    .closing-note{
+      background:linear-gradient(180deg,#f7fbff,#f0f6ff);
+      border:1px dashed #cfe0ff;
+      color:#244062; border-radius:14px;
+      padding:14px 16px; max-width:720px; margin:12px auto 0;
+    }
+    .signature{
+      margin-top:18px; color:#29486b;
+      font-family:'Playfair Display',serif; font-weight:600; font-style:italic;
+      font-size:clamp(18px,3vw,24px);
+    }
+    .sig-names{
+      margin-top:6px; font-family:'Playfair Display',serif; font-weight:700;
+      font-size:clamp(22px,4vw,28px); letter-spacing:.02em; color:#2d4a6a;
+    }
+  </style>
 </head>
 <body>
   <!-- HERO -->
@@ -288,12 +291,45 @@
           </div>
         </form>
 
-        <!-- area list dengan scroll sendiri -->
         <div class="wish-scroll">
           <ul class="wish-list" id="wishList">
             <li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>
           </ul>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING: Surat Cinta -->
+  <section class="closing reveal">
+    <div class="closing-wrap">
+      <div class="closing-card">
+        <div class="closing-title">Terima Kasih & Mohon Doa</div>
+
+        <svg class="flourish" viewBox="0 0 600 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M10,30 C90,10 110,50 190,30 C270,10 290,50 370,30 C450,10 470,50 550,30"
+                fill="none" stroke="rgba(45,74,106,.35)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="300" cy="30" r="3" fill="rgba(45,74,106,.45)"/>
+        </svg>
+
+        <p class="closing-lead">
+          Pernikahan ini kami rayakan dengan sederhana bersama keluarga terdekat.
+          Dengan segala kerendahan hati, kami memohon maaf belum dapat berbagi momen ini secara langsung.
+        </p>
+
+        <p class="closing-note">
+          Doa, dukungan, dan kasih sayang dari Bapak/Ibu/Sahabat semua adalah karunia terindah
+          yang menguatkan langkah kami dalam membangun rumah tangga yang penuh cinta dan keberkahan.
+        </p>
+
+        <svg class="flourish" viewBox="0 0 600 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M10,30 C90,50 110,10 190,30 C270,50 290,10 370,30 C450,50 470,10 550,30"
+                fill="none" stroke="rgba(45,74,106,.35)" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="300" cy="30" r="3" fill="rgba(45,74,106,.45)"/>
+        </svg>
+
+        <div class="signature">With love,</div>
+        <div class="sig-names">Karina &amp; Alvin</div>
       </div>
     </div>
   </section>
@@ -306,14 +342,15 @@
       <div class="quote" style="margin-top:10px">
         <p>“Dan sesungguhnya Dialah yang menciptakan pasangan laki-laki dan perempuan.” <strong>(QS. An-Najm: 45)</strong></p>
       </div>
-      <p style="text-align:center;margin-top:18px;color:#475569">Pernikahan ini kami rayakan secara sederhana hanya bersama keluarga terdekat.</p>
-<p style="text-align:center;margin-top:18px;color:#475569">Dengan segala kerendahan hati, kami mohon maaf tidak dapat berbagi momen ini secara langsung. Namun, doa, dukungan, dan kasih sayang dari Bapak/Ibu/Teman-teman semua tetap menjadi bagian penting dalam kebahagiaan kami.</p>
-<p style="text-align:center;margin-top:18px;color:#475569">Semoga doa restu yang tulus dapat menyertai langkah kami dalam membangun rumah tangga yang penuh cinta dan keberkahan.
-</p>
-<p style="text-align:center;margin-top:18px;color:#475569">
-With love,</p>
-<p style="text-align:center;margin-top:18px;color:#475569">
-Karina & Alvin</p>
+
+<a href="https://www.google.com"
+   target="_blank"
+   rel="noopener noreferrer"
+   style="display:inline-block;text-align:center;margin-top:18px;color:#475569">
+  Dibuat oleh Karina &amp; Alvin
+</a>
+
+
     </div>
   </footer>
 
@@ -364,7 +401,8 @@ END:VCALENDAR`;
     });
 
     // ====== MAPS ======
-    document.getElementById('mapsLink').setAttribute('href', MAPS_URL);
+    document.getElementById('lokasi').querySelector('a').textContent = MAPS_Q;
+    document.getElementById('lokasi').querySelector('a').href = MAPS_URL;
     document.getElementById('openMaps').addEventListener('click', ()=> window.open(MAPS_URL, '_blank'));
     document.getElementById('copyAddr').addEventListener('click', async ()=>{
       try{ await navigator.clipboard.writeText(MAPS_Q); alert('Alamat tersalin: '+MAPS_Q); }catch{ alert('Gagal menyalin alamat'); }
@@ -493,7 +531,7 @@ END:VCALENDAR`;
     audio.addEventListener('ended',updateUI);
     document.addEventListener('visibilitychange',()=>{if(document.hidden) audio.pause(); else audio.play().catch(()=>{});});
 
-    // Autoplay aman (mute -> unmute + fade-in saat memungkinkan)
+    // Autoplay aman
     (async function initAutoplay(){
       const TARGET_VOL=0.85; audio.muted=true; audio.volume=0;
       const tryPlaySilent=async()=>{try{await audio.play();}catch{}};
@@ -522,12 +560,11 @@ END:VCALENDAR`;
     const wMsg     = document.getElementById('wMsg');
     const wStatus  = document.getElementById('wishStatus');
     const wishList = document.getElementById('wishList');
-    const wishScroll = document.querySelector('.wish-scroll'); // <- pembungkus scroll
+    const wishScroll = document.querySelector('.wish-scroll');
 
-    let ALL_WISHES = []; // cache lokal
+    let ALL_WISHES = [];
 
-    // util
-    const esc = s => String(s ?? '').replace(/[&<>\"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+    const esc = s => String(s ?? '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
     const initial = s => (s||'?').trim().charAt(0).toUpperCase();
     const parseTS = (s) => {
       if (!s) return new Date();
@@ -565,7 +602,7 @@ END:VCALENDAR`;
           </div>`;
         wishList.appendChild(li);
       }
-      if (wishScroll) wishScroll.scrollTop = 0; // reset ke atas (terbaru dulu)
+      if (wishScroll) wishScroll.scrollTop = 0;
     }
 
     async function fetchJSON(url, opts){
