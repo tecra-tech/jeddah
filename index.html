@@ -108,6 +108,38 @@
 
     /* --- Canvas petals --- */
     #petalsCanvas{position:absolute;inset:0;z-index:2;pointer-events:none;}
+
+    /* ——— WISHES (biru elegan) ——— */
+.wish-form{display:grid;gap:10px;margin:8px 0 14px}
+.wish-form input,.wish-form textarea{
+  width:100%; padding:12px 14px; border:1px solid #dbe4ef; border-radius:12px;
+  background:#f7faff; color:#1f3550; outline:none;
+}
+.wish-form textarea{min-height:92px; resize:vertical}
+.wish-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.wish-actions .btn{box-shadow:0 10px 24px var(--ring)}
+.wish-hint{color:#51657e}
+
+.wish-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+.wish-item{
+  display:grid; grid-template-columns:auto 1fr; gap:10px;
+  background:linear-gradient(180deg,#f8fbff,#edf4ff);
+  border:1px solid #d8e6fb; border-radius:14px; padding:12px 14px;
+  box-shadow:0 8px 18px var(--ring);
+}
+.wish-avatar{
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;font-weight:700;
+  color:#2d4a6a;background:#e7f0ff;border:1px solid #cfe0ff;
+}
+.wish-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wish-name{font-weight:700;color:#29486b}
+.wish-time{font-size:12px;color:#6b7f96}
+.wish-msg{white-space:pre-wrap;color:#2b3f58;margin-top:4px}
+.wish-empty{color:#57708f;padding:6px 0}
+
+
+
   </style>
 </head>
 <body>
@@ -117,14 +149,14 @@
     <div class="hero-inner">
       <div class="badge">KABAR PERNIKAHAN</div>
       <div class="basmalah">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
-      <p style="margin:15px 0 0;opacity:.9">Assalamualaikum Warahmatullahi Wabarakatuh.</p>
-      <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami ingin mengabarkan acara pernikahan kami.</p>
+      <p style="margin:15px 0 0;opacity:.9">اَلسَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللهِ وَبَرَكَاتُهُ</p>
+      <p style="margin:5px 0 0;opacity:.9">Tanpa mengurangi rasa hormat, kami mewakili keluarga besar ingin mengabarkan acara pernikahan kami yang diselenggarakan secara sederhana dan terbatas.</p>
       <h1 class="names">Karina &amp; Alvin</h1>
       <div class="meta">Kamis, 20 November 2025</div>
       <div class="meta">KJRI Jeddah</div>
       <div class="cta-row">
-        <a id="addCalBtn" class="btn primary" href="#">Simpan ke Kalender</a>
-        <a class="btn ghost" href="#peta">Lihat Lokasi</a>
+        <a id="addCalBtn" class="btn primary" href="#">Save to Calendar</a>
+        <a class="btn ghost" href="#hitung-mundur">Open Card</a>
       </div>
     </div>
     <div class="wave" aria-hidden="true"></div>
@@ -190,7 +222,7 @@
     </div>
   </section>
 
-  <!-- LOCATION & RSVP -->
+  <!-- LOCATION & WISHES -->
   <section class="section reveal">
     <div class="row">
       <div class="card" id="peta">
@@ -205,14 +237,23 @@
         </div>
       </div>
 
-      <div class="card">
-        <h3>RSVP</h3>
-        <p>Mohon konfirmasi kehadiran agar kami dapat mempersiapkan dengan baik.</p>
-        <p><a class="btn primary" id="waBtn" href="https://wa.me/6285607551162?text=Assalamualaikum%2C%20saya%20akan%20hadir%20di%20acara%20Karina%20%26%20Alvin%20insyaAllah." target="_blank" rel="noreferrer">Konfirmasi via WhatsApp</a></p>
-        <small>Terima kasih atas konfirmasinya.</small>
+  <div class="card">
+    <h3>Wishes</h3>
+    <form id="wishForm" class="wish-form">
+      <input id="wName" type="text" name="name" placeholder="Nama" required />
+      <textarea id="wMsg" name="message" placeholder="Tulis ucapan & doa..." required></textarea>
+      <div class="wish-actions">
+        <button class="btn primary" id="wishSend" type="submit">Kirim</button>
+        <span class="wish-hint" id="wishStatus"></span>
       </div>
-    </div>
+    </form>
+
+    <ul class="wish-list" id="wishList">
+      <li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>
+    </ul>
+  </div>
   </section>
+
 
   <footer>
     <div class="section" style="padding-top:0">
@@ -423,6 +464,139 @@ END:VCALENDAR`;
       function detach(){['pointerdown','touchstart','click','keydown'].forEach(ev=>document.removeEventListener(ev,onFirstGesture,true));}
       ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,passive:true,capture:true}));
     })();
+
+/* ====== WISHES (Google Sheets) ====== */
+const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxzEAu2bV6sYEPJqbSBLshXubUi1MgHHy5DACp_l2wYlzW2wr9MEgouITUfQX_eWHXo/exec'; // contoh: https://script.google.com/macros/s/AKfycb.../exec
+const wishForm = document.getElementById('wishForm');
+const wName    = document.getElementById('wName');
+const wMsg     = document.getElementById('wMsg');
+const wStatus  = document.getElementById('wishStatus');
+const wishList = document.getElementById('wishList');
+
+let ALL_WISHES = []; // cache lokal
+
+// util
+const esc = s => String(s ?? '').replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const initial = s => (s||'?').trim().charAt(0).toUpperCase();
+const parseTS = (s) => {
+  if (!s) return new Date();
+  // dukung format 14/09/2025 9:33 dari Sheets
+  const m = String(s).match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})[\s,]*(\d{1,2})?:?(\d{2})?/);
+  if (m) {
+    const [_, d, mo, y, hh='0', mm='0'] = m;
+    return new Date(Number(y.length===2?('20'+y):y), Number(mo)-1, Number(d), Number(hh), Number(mm));
+  }
+  const t = Date.parse(s);
+  return isNaN(t) ? new Date() : new Date(t);
+};
+const timeAgo = (isoLike) => {
+  const d = Math.max(1, Math.floor((Date.now() - parseTS(isoLike).getTime())/1000));
+  if (d < 60) return `${d} dtk lalu`;
+  const m = Math.floor(d/60); if (m < 60) return `${m} mnt lalu`;
+  const h = Math.floor(m/60); if (h < 24) return `${h} jam lalu`;
+  const a = Math.floor(h/24); return `${a} hari lalu`;
+};
+
+function renderWishes(rows){
+  ALL_WISHES = rows;
+  wishList.innerHTML = '';
+  if(!rows || !rows.length){
+    wishList.innerHTML = '<li class="wish-empty">Belum ada ucapan. Jadilah yang pertama ✨</li>';
+    return;
+  }
+  for(const r of rows){
+    const li = document.createElement('li');
+    li.className = 'wish-item';
+    li.innerHTML = `
+      <div class="wish-avatar">${esc(initial(r.name))}</div>
+      <div>
+        <div class="wish-meta">
+          <span class="wish-name">${esc(r.name)}</span>
+          <span class="wish-time">${esc(timeAgo(r.timestamp))}</span>
+        </div>
+        <div class="wish-msg">${esc(r.message)}</div>
+      </div>`;
+    wishList.appendChild(li);
+  }
+}
+
+// robust fetch JSON (fallback dari text -> JSON)
+async function fetchJSON(url, opts){
+  const res = await fetch(url, { cache:'no-store', ...opts });
+  const txt = await res.text();
+  try { return JSON.parse(txt); } catch { return txt; }
+}
+
+function normalizeRows(raw){
+  // Terima beberapa bentuk: {ok,rows}, {rows}, Array<obj>, atau CSV array
+  if (Array.isArray(raw)) return raw;
+  if (raw && raw.rows) return raw.rows;
+  if (raw && raw.ok && raw.rows) return raw.rows;
+  // kalau yang dikirim string "ok" dsb., biarkan kosong
+  return [];
+}
+
+async function loadWishes(){
+  try{
+    const data = await fetchJSON(`${SHEETS_WEBAPP_URL}?limit=100&nocache=${Date.now()}`);
+    const rows = normalizeRows(data)
+      .map(r => ({
+        timestamp: r.timestamp ?? r.time ?? r[0],
+        name: (r.name ?? r[1] ?? '').trim(),
+        message: (r.message ?? r[2] ?? '').trim()
+      }))
+      .filter(r => r.name && r.message);
+    renderWishes(rows);
+  }catch(e){
+    // diamkan—UI akan menampilkan "Belum ada ucapan"
+    console.warn('loadWishes error', e);
+  }
+}
+
+let sending = false;
+wishForm.addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  if(sending) return;
+  const name = wName.value.trim(), message = wMsg.value.trim();
+  if(!name || !message){ wStatus.textContent = 'Nama & ucapan wajib diisi.'; return; }
+
+  // rate limit kecil
+  const last = +localStorage.getItem('w_last') || 0;
+  if(Date.now() - last < 10_000){ wStatus.textContent = 'Tunggu sebentar sebelum mengirim lagi 🙏'; return; }
+
+  sending = true;
+  wStatus.textContent = 'Mengirim...';
+  try{
+    const resp = await fetchJSON(SHEETS_WEBAPP_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({ name, message })
+    });
+
+    // anggap sukses jika {ok:true} ATAU string mengandung "ok"
+    const ok = (resp && resp.ok === true) || (typeof resp === 'string' && /ok/i.test(resp));
+    if(ok){
+      wMsg.value = '';
+      wStatus.textContent = 'Terkirim. Terima kasih! 💙';
+      localStorage.setItem('w_last', String(Date.now()));
+      // prepend sementara
+      renderWishes([{ timestamp:new Date().toISOString(), name, message }, ...ALL_WISHES]);
+      // sync server
+      loadWishes();
+    }else{
+      wStatus.textContent = 'Gagal mengirim. Coba lagi.';
+    }
+  }catch(err){
+    console.warn(err);
+    wStatus.textContent = 'Gagal mengirim (koneksi?).';
+  }finally{
+    sending = false;
+    setTimeout(()=> wStatus.textContent = '', 3500);
+  }
+});
+
+loadWishes();
+
 
     // ====== Event done note ======
     (function(){
