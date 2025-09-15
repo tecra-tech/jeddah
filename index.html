@@ -5,11 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#2d4a6a" />
   <title>Undangan Karina & Alvin — 20 Nov 2025</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600;700&family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
-
   <style>
     :root{ --dove:#2d4a6a; --dove-weak:#8aa0b8; --ink:#0f172a; --paper:#ffffff; --muted:#eef2f7; --ring: rgba(45,74,106,.22); }
     html{scroll-behavior:smooth}
@@ -32,33 +30,12 @@
     .basmalah{font-family:'Noto Naskh Arabic',serif;font-size:28px;margin:18px 0 6px;opacity:.95}
     .names{font-family:'Playfair Display',serif;font-weight:700;font-size:clamp(36px,6vw,64px);letter-spacing:.02em;margin:8px 0 8px}
     .meta{opacity:.9;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+    .meta .dot{opacity:.5;padding:0 .5ch}
     .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
     .btn{appearance:none;border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;box-shadow:0 10px 24px rgba(0,0,0,.25)}
     .btn.primary{background:#fff;color:var(--dove)}
     .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
     .wave{position:absolute;left:0;right:0;bottom:0;height:64px;background:linear-gradient(180deg,#20364c 0%,transparent 60%);mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" d="M0,224L48,197.3C96,171,192,117,288,96C384,75,480,85,576,117.3C672,149,768,203,864,208C960,213,1056,171,1152,138.7C1248,107,1344,85,1392,74.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"/></svg>') center/cover no-repeat}
-
-    /* Dear pill */
-    .dear-greet{
-      margin-top:16px;
-      color:#eaf2ff;
-      font-weight:700;
-      background:rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.30);
-      padding:10px 14px;
-      border-radius:12px;
-      box-shadow:0 10px 24px rgba(0,0,0,.25);
-      backdrop-filter:blur(2px);
-    }
-    .dear-greet .dear-name{
-      display:inline-block;
-      margin-left:.35rem;
-      padding:4px 10px;
-      border-radius:10px;
-      background:rgba(255,255,255,.12);
-      border:1px solid rgba(255,255,255,.35);
-      color:#ffffff;
-    }
 
     /* --- SECTIONS --- */
     .section{max-width:1100px;margin:0 auto;padding:48px 20px; position:relative;}
@@ -79,10 +56,12 @@
     .person{border:1px dashed var(--dove-weak);padding:16px;border-radius:14px;background:#f9fbff}
     .person .name{font-weight:700;color:var(--dove)}
     .person .parents{color:#435568;font-size:14px;margin-top:2px}
+
+    /* media (img/video) di dalam card */
     .card .media{ margin:0 0 14px;border:1px solid #dbe4ef;border-radius:14px;overflow:hidden;box-shadow:0 8px 18px var(--ring);aspect-ratio:16/9;background:#f4f7fb; }
     .card .media img,.card .media video{width:100%;height:100%;object-fit:cover;display:block}
 
-    /* --- GALERI (FADE) --- */
+    /* --- GALERI (FADE, STORY STYLE) --- */
     .carousel{position:relative;overflow:hidden;}
     .track{position:relative;aspect-ratio:16/9;touch-action:none;user-select:none;}
     .slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 2s ease;}
@@ -157,8 +136,9 @@
         radial-gradient(900px 400px at 85% 100%, rgba(45,74,106,.12), transparent 60%),
         linear-gradient(180deg,#eef5ff 0%,#e6eef9 100%);
       border-top:1px solid #d6e2f3;
-      overflow:hidden;
+      overflow:hidden; /* supaya pattern top-nya rapi */
     }
+    /* layer pattern untuk area atas closing */
     #closingArabesque{
       position:absolute; inset:0 0 auto 0; height:260px; pointer-events:none; z-index:0;
       --arab-size:60px;
@@ -187,13 +167,24 @@
       box-shadow:0 22px 50px rgba(45,74,106,.18), 0 4px 0 #eaf1fa inset;
       padding:28px 22px; text-align:center;
     }
-    .closing-title{font-family:'Playfair Display',serif;color:var(--dove);font-weight:700;font-size:clamp(20px,3.2vw,28px);margin:4px 0 8px;}
+    .closing-title{
+      font-family:'Playfair Display',serif;
+      color:var(--dove);
+      font-weight:700; font-size:clamp(20px,3.2vw,28px);
+      margin:4px 0 8px;
+    }
     .closing-lead{ color:#3a516b; line-height:1.75; margin:10px auto; max-width:720px; }
     .flourish{ margin:18px auto; width:min(360px,80%); opacity:.75; filter:drop-shadow(0 2px 0 rgba(45,74,106,.05)); }
-    .closing-note{ background:linear-gradient(180deg,#f7fbff,#f0f6ff); border:1px dashed #cfe0ff; color:#244062; border-radius:14px; padding:14px 16px; max-width:720px; margin:12px auto 0; }
+    .closing-note{
+      background:linear-gradient(180deg,#f7fbff,#f0f6ff);
+      border:1px dashed #cfe0ff;
+      color:#244062; border-radius:14px;
+      padding:14px 16px; max-width:720px; margin:12px auto 0;
+    }
     .signature{ margin-top:18px; color:#29486b; font-family:'Playfair Display',serif; font-weight:600; font-style:italic; font-size:clamp(18px,3vw,24px); }
     .sig-names{ margin-top:6px; font-family:'Playfair Display',serif; font-weight:700; font-size:clamp(22px,4vw,28px); letter-spacing:.02em; color:#2d4a6a; }
 
+    /* ===== Footer credit ===== */
     .footer-credit{ text-align:center; margin-top:18px; }
     .made-by{ color:#2d4a6a; font-weight:600; text-decoration:none; cursor:pointer; display:inline-flex; align-items:center; gap:.4ch; padding:.2rem .6rem; border-radius:10px; transition:color .2s ease, background .2s ease, box-shadow .2s ease; }
     .made-by::after{ content:'↗'; font-size:.9em; opacity:.55; transition:transform .2s ease, opacity .2s ease; }
@@ -214,7 +205,6 @@
   </style>
 </head>
 <body>
-
   <!-- HERO -->
   <header class="hero" id="hero">
     <canvas id="petalsCanvas"></canvas>
@@ -226,15 +216,9 @@
       <h1 class="names">Karina &amp; Alvin</h1>
       <div class="meta">Kamis, 20 November 2025</div>
       <div class="meta">KJRI Jeddah</div>
-
       <div class="cta-row">
-        <a id="addCalBtn" class="btn ghost" href="#">Save to Calendar</a>
-        <a class="btn primary" href="#hitung-mundur">Open Card</a>
-      </div>
-
-      <!-- Dear pill -->
-      <div class="dear-greet" aria-live="polite">
-        Dear, <span id="dearName" class="dear-name">Tamu Istimewa</span>
+        <a id="addCalBtn" class="btn primary" href="#">Save to Calendar</a>
+        <a class="btn ghost" href="#hitung-mundur">Open Card</a>
       </div>
     </div>
     <div class="wave" aria-hidden="true"></div>
@@ -242,7 +226,9 @@
 
   <!-- COUNTDOWN -->
   <section class="section reveal" id="hitung-mundur">
+    <!-- Arabian texture layer -->
     <div id="arabesqueLayer" aria-hidden="true"></div>
+
     <h2>Hitung Mundur</h2>
     <div class="count-grid" role="timer" aria-live="polite">
       <div class="tile"><div class="num" id="d">–</div><div class="lbl">Hari</div></div>
@@ -273,23 +259,23 @@
                  onerror="this.outerHTML='<div style=&quot;padding:18px;text-align:center;color:#64748b&quot;>Video mempelai belum tersedia</div>'">
           </video>
         </div>
-        <div class="pair" style="text-align:center;">
+        <div class="pair" style=text-align:center;>
           <div class="person">
             <div class="name">Karina Dewi Oktaviani</div>
             <div class="parents">Anak kedua dari</div>
-            <div class="parents">Bapak Sri Mulyana &amp; Ibu Sri Herlina</div>
+			<div class="parents">Bapak Sri Mulyana &amp; Ibu Sri Herlina</div>
           </div>
           <div class="person">
             <div class="name">Alvin Rahman Kautsar</div>
             <div class="parents">Anak pertama dari</div>
-            <div class="parents">Bapak Joko Umoro Kalbu &amp; Ibu Saripah</div>
+			<div class="parents">Bapak Joko Umoro Kalbu &amp; Ibu Saripah</div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- GALERI -->
+  <!-- GALERI (FADE) -->
   <section class="section reveal">
     <h2>Galeri</h2>
     <div class="carousel" id="carousel">
@@ -297,11 +283,11 @@
         <img class="slide" src="image/wedding-foto-11.jpeg" alt="Foto 1" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 1)</div>'"/>
         <img class="slide" src="image/wedding-foto-12.jpeg" alt="Foto 2" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 2)</div>'"/>
         <img class="slide" src="image/wedding-foto-13.jpeg" alt="Foto 3" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 3)</div>'"/>
-        <img class="slide" src="image/wedding-foto-14.jpeg" alt="Foto 4" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 4)</div>'"/>
-        <img class="slide" src="image/wedding-foto-15.jpeg" alt="Foto 5" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 5)</div>'"/>
-        <img class="slide" src="image/wedding-foto-16.jpeg" alt="Foto 6" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 6)</div>'"/>
-        <img class="slide" src="image/wedding-foto-17.jpeg" alt="Foto 7" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 7)</div>'"/>
-        <img class="slide" src="image/wedding-foto-18.jpeg" alt="Foto 8" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 8)</div>'"/>
+	<img class="slide" src="image/wedding-foto-14.jpeg" alt="Foto 4" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 4)</div>'"/>
+	<img class="slide" src="image/wedding-foto-15.jpeg" alt="Foto 5" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 5)</div>'"/>
+	<img class="slide" src="image/wedding-foto-16.jpeg" alt="Foto 6" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 6)</div>'"/>
+	<img class="slide" src="image/wedding-foto-17.jpeg" alt="Foto 7" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 7)</div>'"/>
+	<img class="slide" src="image/wedding-foto-18.jpeg" alt="Foto 8" onerror="this.outerHTML='<div class=\'slide\' style=\'background:linear-gradient(135deg,#edf2f7,#dbe7f3);display:grid;place-items:center;color:#64748b\'>Letakkan foto kalian di sini (foto 8)</div>'"/>
       </div>
     </div>
   </section>
@@ -341,9 +327,10 @@
     </div>
   </section>
 
-  <!-- CLOSING -->
+  <!-- CLOSING: Surat Cinta -->
   <section class="closing reveal">
     <div class="closing-wrap">
+      <!-- Arabian texture top area -->
       <div id="closingArabesque" aria-hidden="true"></div>
 
       <div class="closing-card">
@@ -385,8 +372,14 @@
       <div class="quote" style="margin-top:10px">
         <p>“Dan sesungguhnya Dialah yang menciptakan pasangan laki-laki dan perempuan.” <strong>(QS. An-Najm: 45)</strong></p>
       </div>
+
+      <!-- Credit clickable, centered, with ↗ hint -->
       <p class="footer-credit">
-        <a class="made-by" href="https://tecra-tech.github.io/display/" target="_blank" rel="noopener noreferrer" title="Buka di tab baru">
+        <a class="made-by"
+           href="https://tecra-tech.github.io/display/"
+           target="_blank"
+           rel="noopener noreferrer"
+           title="Buka di tab baru">
           Dibuat oleh Karina &amp; Alvin
         </a>
       </p>
@@ -404,38 +397,6 @@
   </div>
 
   <script>
-    /* ===== Dear, [Nama] — ambil dari URL =====
-       Mendukung ?to= / ?nama= / ?guest= / ?invitee=
-       + fallback untuk query tanpa key: ?Alvin atau ?=Alvin
-    */
-    (function () {
-      const el = document.getElementById('dearName');
-      if (!el) return;
-
-      const qs = new URLSearchParams(location.search);
-      let raw =
-        qs.get('to') ||
-        qs.get('nama') ||
-        qs.get('guest') ||
-        qs.get('invitee') || '';
-
-      // Fallback: "?Alvin" atau "?=Alvin"
-      if (!raw) {
-        const s = location.search.replace(/^\?/, '');
-        if (s && !s.includes('&')) {
-          if (!s.includes('=')) raw = decodeURIComponent(s);
-          else if (/^=/.test(s)) raw = decodeURIComponent(s.slice(1));
-        }
-      }
-
-      raw = (raw || '').replace(/\+/g,' ').trim().replace(/[\u0000-\u001F]/g,'').slice(0,60);
-      const pretty = raw
-        ? raw.replace(/\s+/g,' ')
-             .replace(/\b([A-Za-zÀ-ÖØ-öø-ÿ])([A-Za-zÀ-ÖØ-öø-ÿ'’-]*)/g,(_,a,b)=>a.toUpperCase()+b.toLowerCase())
-        : 'Tamu Istimewa';
-      el.textContent = pretty;
-    })();
-
     // ====== CONFIG ======
     const EVENT_ISO = '2025-11-20T11:00:00+03:00';
     const MAPS_Q = 'KJRI Jeddah';
@@ -602,7 +563,85 @@ END:VCALENDAR`;
     audio.addEventListener('ended',updateUI);
     document.addEventListener('visibilitychange',()=>{if(document.hidden) audio.pause(); else audio.play().catch(()=>{});});
 
-    // ====== WISHES (Google Sheets) ======
+    // Autoplay aman
+    (async function initAutoplay(){
+      const TARGET_VOL=0.85; audio.muted=true; audio.volume=0;
+      const tryPlaySilent=async()=>{try{await audio.play();}catch{}};
+      if(document.readyState==='complete'||document.readyState==='interactive'){tryPlaySilent();}
+      else{document.addEventListener('DOMContentLoaded',tryPlaySilent,{once:true});}
+      const tryUnmute=async()=>{
+        try{
+          audio.muted=false; if(audio.paused) await audio.play();
+          let v=0; const step=()=>{v=Math.min(TARGET_VOL,v+0.05); audio.volume=v; if(v<TARGET_VOL) requestAnimationFrame(step);};
+          requestAnimationFrame(step); updateUI(); detach();
+        }catch(e){}
+      };
+      [200,600,1200].forEach(t=>setTimeout(tryUnmute,t));
+      function onFirstGesture(){audio.muted=false; if(audio.paused) audio.play().catch(()=>{}); let v=0; audio.volume=0;
+        const step=()=>{v=Math.min(TARGET_VOL,v+0.05); audio.volume=v; if(v<TARGET_VOL) requestAnimationFrame(step);};
+        requestAnimationFrame(step); updateUI(); detach();
+      }
+      function detach(){['pointerdown','touchstart','click','keydown'].forEach(ev=>document.removeEventListener(ev,onFirstGesture,true));}
+      ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,passive:true,capture:true}));
+    })();
+
+    /* ====== ARABIAN TEXTURE (generator, dipakai di 2 section) ====== */
+    (function(){
+      const DPR = Math.min(2, window.devicePixelRatio||1);
+      function drawTile(size){
+        const s = Math.max(40, size|0);
+        const c = document.createElement('canvas');
+        c.width = s*DPR; c.height = s*DPR;
+        const x = c.getContext('2d');
+        x.setTransform(DPR,0,0,DPR,0,0);
+        x.clearRect(0,0,s,s);
+
+        const colMain = 'rgba(45,74,106,.48)';   // biru elegan
+        const colHi   = 'rgba(255,255,255,.75)'; // putih kontras
+        const colSoft = 'rgba(184,197,214,.42)'; // abu lembut
+
+        x.lineCap='round'; x.lineJoin='round';
+        const cx=s/2, cy=s/2;
+        function poly(n,r,rot){const pts=[];for(let i=0;i<n;i++){const a=rot+i*2*Math.PI/n;pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r]);}return pts;}
+        function path(p){x.beginPath();x.moveTo(p[0][0],p[0][1]);for(let i=1;i<p.length;i++)x.lineTo(p[i][0],p[i][1]);x.closePath();}
+        function line(x1,y1,x2,y2,w,col){x.beginPath();x.moveTo(x1,y1);x.lineTo(x2,y2);x.lineWidth=w;x.strokeStyle=col;x.stroke();}
+
+        const r1=s*0.34, r2=s*0.17;
+        x.lineWidth=1.05; x.strokeStyle=colHi;
+        path(poly(4,r1,0)); x.stroke(); path(poly(4,r1,Math.PI/4)); x.stroke();
+        path(poly(4,r2,0)); x.stroke(); path(poly(4,r2,Math.PI/4)); x.stroke();
+
+        x.lineWidth=.85; x.strokeStyle=colMain;
+        path(poly(4,r1,0)); x.stroke(); path(poly(4,r1,Math.PI/4)); x.stroke();
+        x.strokeStyle=colSoft;
+        path(poly(4,r2,0)); x.stroke(); path(poly(4,r2,Math.PI/4)); x.stroke();
+
+        const rays=[[s/2,0],[s,s/2],[s/2,s],[0,s/2],[0,0],[s,0],[s,s],[0,s]];
+        for(const [rx,ry] of rays) line(cx,cy,rx,ry,1.0,colHi);
+        for(const [rx,ry] of rays) line(cx,cy,rx,ry,.8,colMain);
+
+        x.fillStyle='rgba(45,74,106,.14)';
+        x.beginPath(); x.arc(cx,cy,1,0,Math.PI*2); x.fill();
+
+        return c.toDataURL();
+      }
+
+      function setTexture(el, baseDiv=18, min=42, max=80){
+        if(!el) return;
+        const base = (el.parentElement?.clientWidth || window.innerWidth || 960);
+        const size = Math.max(min, Math.min(max, Math.round(base / baseDiv)));
+        el.style.setProperty('--arab-size', size + 'px');
+        el.style.backgroundImage = `url(${drawTile(size)})`;
+      }
+
+      const layerCountdown = document.getElementById('arabesqueLayer');
+      const layerClosing   = document.getElementById('closingArabesque');
+      function applyAll(){ setTexture(layerCountdown); setTexture(layerClosing); }
+      applyAll();
+      window.addEventListener('resize', applyAll, {passive:true});
+    })();
+
+    /* ====== WISHES (Google Sheets) ====== */
     const SHEETS_WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbxzEAu2bV6sYEPJqbSBLshXubUi1MgHHy5DACp_l2wYlzW2wr9MEgouITUfQX_eWHXo/exec';
     const wishForm = document.getElementById('wishForm');
     const wName    = document.getElementById('wName');
