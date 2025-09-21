@@ -65,7 +65,7 @@
     .progress .bar{flex:1;height:4px;background:rgba(255,255,255,.35);border-radius:999px;overflow:hidden;box-shadow:0 2px 4px rgba(0,0,0,.12) inset}
     .progress .fill{height:100%;width:0%;background:#fff;border-radius:inherit}
 
-    /* --- MAP CARD --- */
+    /* --- MAP CARD (styles boleh dibiarkan, elemen dipangkas) --- */
     .map-card{position:relative;border:1px solid #dbe4ef;border-radius:16px;overflow:hidden;box-shadow:0 10px 24px var(--ring);}
     .map-card header{position:absolute;left:12px;top:12px;z-index:2;background:rgba(255,255,255,.9);border:1px solid #dbe4ef;padding:8px 10px;border-radius:10px;font-weight:600;color:var(--dove);}
     .map-card .actions{position:absolute;right:12px;bottom:12px;z-index:2;display:flex;gap:8px;}
@@ -73,7 +73,6 @@
     .btn.primary{background:#fff;color:var(--dove)}
     .btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.6)}
     .btn.small{padding:8px 12px;border-radius:10px;font-weight:600;border:1px solid #dbe4ef;background:#fff;color:var(--dove);box-shadow:0 8px 16px rgba(0,0,0,.08);}
-    .map-card iframe{width:100%;height:100%;aspect-ratio:16/9;border:0;filter:saturate(1.05) contrast(1.05);}
 
     /* --- LAYOUT: Lokasi & WISHES --- */
     .row{display:grid;grid-template-columns:1fr;gap:32px;}
@@ -193,7 +192,7 @@
     }
     #hitung-mundur > *:not(#arabesqueLayer){ position:relative; z-index:2; }
 
-    /* ===== Greeting pill (outer + inner) ===== */
+    /* ===== Greeting pill ===== */
     .guest-cta{ margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:12px; }
     .guest-chip{
       display:inline-flex; align-items:center; gap:10px;
@@ -212,14 +211,29 @@
     .guest-name-pill .guest-name{ color:#fff; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial; font-weight:800; font-size:16px; letter-spacing:.2px; }
     .hidden{display:none;}
 
-        /* Samain gaya & rounded tombol dengan chip */
-    #openCardBelow {
-      border-radius: 999px;         /* bulat seperti chip */
-      padding: 12px 18px;           /* biar proporsional */
-      box-shadow: 0 10px 24px rgba(0,0,0,.25);
-    }
-    /* jarak biar nempel rapi di bawah chip */
+    #openCardBelow { border-radius:999px; padding:12px 18px; box-shadow:0 10px 24px rgba(0,0,0,.25); }
     .guest-cta { gap: 12px; }
+
+    /* === Footer credit === */
+    .footer-credit{ margin:18px 0 0; display:flex; justify-content:center; align-items:center; text-align:center; }
+    .footer-credit .made-by{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 14px; border:1.5px solid #cfe0ff; border-radius:999px;
+      background:linear-gradient(180deg,#ffffff,#f4f8ff);
+      color:var(--dove); font-weight:700; letter-spacing:.02em;
+      box-shadow:0 10px 24px var(--ring);
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      cursor:pointer;
+    }
+    .footer-credit .made-by:hover{ transform:translateY(-1px); box-shadow:0 14px 30px var(--ring); border-color:#b7c9e3; text-decoration:none; }
+    .footer-credit .made-by:focus-visible{ outline:2px solid var(--dove-weak); outline-offset:3px; }
+    
+    /* Center a single-card row nicely on desktop */
+    .row-center{
+      grid-template-columns: min(760px, 100%);
+      justify-content: center;    /* center the track inside container */
+    }
+
   </style>
 </head>
 <body>
@@ -305,21 +319,9 @@
     </div>
   </section>
 
-  <!-- LOCATION & WISHES -->
+  <!-- WISHES (Lokasi card DIHAPUS) -->
   <section class="section reveal">
-    <div class="row">
-      <div class="card" id="peta">
-        <h3>Lokasi</h3>
-        <div class="map-card">
-          <header>KJRI Jeddah</header>
-          <div class="actions">
-            <button class="btn small" id="openMaps">Buka Maps</button>
-            <button class="btn small" id="copyAddr">Copy Alamat</button>
-          </div>
-          <iframe id="mapFrame" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-      </div>
-
+    <div class="row row-center">
       <div class="card">
         <h3>Wishes</h3>
         <form id="wishForm" class="wish-form">
@@ -356,11 +358,10 @@
 
         <p class="closing-lead">
           Pernikahan ini kami rayakan dengan sederhana bersama keluarga terdekat.
-          Dengan segala kerendahan hati, kami memohon maaf belum dapat berbagi momen ini secara langsung.
         </p>
 
         <p class="closing-note">
-          Doa, dukungan, dan kasih sayang dari Bapak/Ibu/Sahabat semua adalah karunia terindah
+          Doa, dukungan, dan kasih sayang dari Bapak/Ibu/Teman-teman semua adalah karunia terindah
           yang menguatkan langkah kami dalam membangun rumah tangga yang penuh cinta dan keberkahan.
         </p>
 
@@ -376,6 +377,8 @@
     </div>
   </section>
 
+  <!-- Gift section DIHAPUS -->
+
   <footer>
     <div class="section" style="padding-top:0">
       <div class="quote">
@@ -385,7 +388,8 @@
         <p>“Dan sesungguhnya Dialah yang menciptakan pasangan laki-laki dan perempuan.” <strong>(QS. An-Najm: 45)</strong></p>
       </div>
       <p class="footer-credit">
-        <a class="made-by" href="https://tecra-tech.github.io/display/" target="_blank" rel="noopener noreferrer" title="Buka di tab baru">
+        <a class="made-by" href="https://tecra-tech.github.io/display/"
+           target="_blank" rel="noopener noreferrer" title="Buka di tab baru">
           Dibuat oleh Karina &amp; Alvin
         </a>
       </p>
@@ -402,7 +406,7 @@
     <audio id="bgm" src="audio/lagu.mp3" preload="auto" loop playsinline muted autoplay></audio>
   </div>
 
-  <!-- Greeting akan disisipkan via JS tepat di bawah 'KJRI Jeddah' -->
+  <!-- Greeting disisipkan via JS -->
   <div class="guest-cta hidden" id="guestCta" aria-hidden="true">
     <div class="guest-chip">
       <span class="label">Dear,</span>
@@ -417,14 +421,21 @@
     const MAPS_Q = 'KJRI Jeddah';
     const MAPS_URL = 'https://maps.google.com/?q=' + encodeURIComponent(MAPS_Q);
 
-    // ====== MAPS ======
-    document.getElementById('lokasi').querySelector('a').textContent = MAPS_Q;
-    document.getElementById('lokasi').querySelector('a').href = MAPS_URL;
-    document.getElementById('openMaps').addEventListener('click', ()=> window.open(MAPS_URL, '_blank'));
-    document.getElementById('copyAddr').addEventListener('click', async ()=>{
-      try{ await navigator.clipboard.writeText(MAPS_Q); alert('Alamat tersalin: '+MAPS_Q); }catch{ alert('Gagal menyalin alamat'); }
-    });
-    document.getElementById('mapFrame').src = 'https://www.google.com/maps?q=' + encodeURIComponent(MAPS_Q) + '&output=embed';
+    // ====== MAP LINK (aman meski card peta dihapus) ======
+    (function(){
+      const lokasiWrap = document.getElementById('lokasi');
+      const a = lokasiWrap ? lokasiWrap.querySelector('a') : null;
+      if(a){ a.textContent = MAPS_Q; a.href = MAPS_URL; }
+      // elemen-elemen berikut hanya ada kalau card peta masih dipakai
+      const btnOpen = document.getElementById('openMaps');
+      const btnCopy = document.getElementById('copyAddr');
+      const mapFrame = document.getElementById('mapFrame');
+      if(btnOpen) btnOpen.addEventListener('click', ()=> window.open(MAPS_URL, '_blank'));
+      if(btnCopy) btnCopy.addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(MAPS_Q); alert('Alamat tersalin: '+MAPS_Q); }catch{ alert('Gagal menyalin alamat'); }
+      });
+      if(mapFrame) mapFrame.src = 'https://www.google.com/maps?q=' + encodeURIComponent(MAPS_Q) + '&output=embed';
+    })();
 
     // ====== COUNTDOWN ======
     const dEl=document.getElementById('d'), hEl=document.getElementById('h'), mEl=document.getElementById('m'), sEl=document.getElementById('s');
@@ -481,7 +492,7 @@
     });
     document.addEventListener('visibilitychange',()=>{paused=document.hidden;});
 
-    // ====== CANVAS PETALS (kecepatan sesuai versi yang kamu mau) ======
+    // ====== CANVAS PETALS ======
     const canvas = document.getElementById('petalsCanvas');
     const hero = document.getElementById('hero');
     const ctx = canvas.getContext('2d');
@@ -570,7 +581,7 @@
       ['pointerdown','touchstart','click','keydown'].forEach(ev=>document.addEventListener(ev,onFirstGesture,{once:true,passive:true,capture:true}));
     })();
 
-    /* ====== ARABIAN TEXTURE (generator aktif) ====== */
+    /* ====== ARABIAN TEXTURE (generator) ====== */
     (function(){
       const DPR = Math.min(2, window.devicePixelRatio||1);
       function drawTile(size){
@@ -782,19 +793,17 @@
       anchor.insertAdjacentElement('afterend', cta);
     })();
 
-    // Samain lebar tombol Open Card dengan lebar pill "Dear, Nama"
+    // Samakan lebar tombol Open Card dengan pill nama
     function syncOpenCardWidth() {
       const chip = document.querySelector('.guest-chip');
       const btn  = document.getElementById('openCardBelow');
       if (!chip || !btn) return;
-      // kasih width chip + sedikit ruang biar tepiannya gak ketabrak shadow
       btn.style.width = chip.offsetWidth + 'px';
     }
-    // panggil setelah greeting disisipkan
     window.addEventListener('load', syncOpenCardWidth);
     window.addEventListener('resize', () => requestAnimationFrame(syncOpenCardWidth));
 
-
+    // ===== Gift JS DIHAPUS (card gift ditiadakan) =====
   </script>
 </body>
 </html>
